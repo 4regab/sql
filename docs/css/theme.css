@@ -1,0 +1,140 @@
+/* =====================================================================
+   SCHEMA THEME: cool drafting paper, engineering grotesk, monospace query listings.
+   Space Grotesk (display) · IBM Plex Sans (reading) · JetBrains Mono (code)
+   ===================================================================== */
+:root{
+  --night:#0d1117; --night-2:#161b22; --bone:#e9ece6; --bone-2:#a9b0aa;
+  --paper:#eceee8; --paper-2:#f7f8f4; --ink:#11151a; --ink-2:#343b44; --muted:#5f6872; --rule:rgba(17,21,26,.15);
+  --accent:#2457c5; --pc:#7fb0ff;
+  --display:'Space Grotesk',system-ui,sans-serif; --read:'IBM Plex Sans',system-ui,sans-serif; --ui:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace; --mast:'Space Grotesk',system-ui,sans-serif;
+  --code-bg:#0f1419; --code-ink:#e6e8e3;
+}
+body{background:var(--paper);
+  background-image:linear-gradient(rgba(17,21,26,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(17,21,26,.035) 1px,transparent 1px);
+  background-size:28px 28px}
+.paper{background-image:linear-gradient(rgba(17,21,26,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(17,21,26,.035) 1px,transparent 1px);background-size:28px 28px}
+.op-title,.lhead-t,.bhead-t,.step-t,.rooms-t,.res-t,.cred-t,.q-text,.room-t,.dr-t,.q-done h4{font-weight:700;letter-spacing:-.035em}
+.fp-mast{font-weight:700 !important;letter-spacing:-.05em;text-transform:none}
+.fp-head{letter-spacing:-.04em}
+.op-title{font-size:clamp(44px,7.2vw,124px);line-height:.94}
+.lhead-t{font-size:clamp(38px,5.2vw,82px);line-height:1}
+.bhead-t{font-size:clamp(30px,3.6vw,54px);line-height:1.04}
+.bhead > div{min-width:0}
+.bhead-src,.lhead-src{margin:10px 0 0;font:500 13px/1.45 var(--mono);color:var(--muted);letter-spacing:.01em}
+.lhead-src{margin-top:18px}
+.step-t{font-size:clamp(28px,2.8vw,42px);line-height:1.05}
+.step-sub{display:block;margin-top:8px;font:500 .42em/1.2 var(--mono);letter-spacing:0;color:var(--muted)}
+.step > p + p{margin-top:1em}
+.q-text{font-size:clamp(22px,2.2vw,29px);line-height:1.24}
+.rooms-t{font-size:clamp(40px,5.4vw,84px)}
+.room-t{font-size:clamp(20px,1.7vw,25px);line-height:1.14}
+.res-t{font-size:clamp(52px,8vw,120px)}
+.dr-t{font-size:22px}
+.room-img{filter:grayscale(.2) contrast(1.06)}
+.lede{font-size:clamp(22px,2.2vw,29px);font-weight:400;letter-spacing:-.01em}
+.body-lg{font-size:clamp(18px,1.4vw,20px)}
+.ps-text{font-weight:600;letter-spacing:-.03em}
+.op-dots{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:36px 36px}
+.loader{background:var(--paper);color:var(--ink)}
+.ld-eb{color:var(--accent);font-family:var(--mono)}
+.ld-num{font-family:var(--display);font-weight:700}
+.ld-t{color:var(--muted);font-family:var(--mono);font-style:normal;font-size:16px;letter-spacing:.06em}
+.ld-bar{background:var(--rule)}
+.ld-bar i{background:var(--accent)}
+.room-fig{background:#d3d7d0}
+.fp-top,.fp-strip p,.kicker,.cap-k,.op-eb,.lhead-eb{font-family:var(--mono) !important;letter-spacing:.04em}
+.term{font-family:var(--mono);font-weight:600}
+
+/* ---------- inline code in prose ---------- */
+.body-lg code,.lede code,.def code,.blist code,.syn dd code,.step p code,.hs-c code,.code-i code,.rule-l code,.prin p code,.opt code{
+  font:500 .9em var(--mono);background:color-mix(in srgb,var(--accent) 10%,transparent);color:var(--ink);padding:.08em .34em;border-radius:4px;white-space:normal}
+
+/* ---------- SQL listing ---------- */
+.sql{margin-top:30px;margin-bottom:0}
+.sql pre{margin:0;padding:20px 22px 22px;background:var(--code-bg);color:var(--code-ink);border-radius:0 0 12px 12px;
+  font:500 clamp(14.5px,1.15vw,16.5px)/1.7 var(--mono);overflow-x:auto;white-space:pre;tab-size:4;
+  box-shadow:0 18px 40px -24px rgba(0,0,0,.55)}
+.sql-k{display:flex;align-items:center;gap:12px;padding:9px 16px;background:#1b222b;color:#9aa6b2;border-radius:12px 12px 0 0;
+  font:600 11.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.sql-dot{display:inline-flex;gap:6px}.sql-dot i{width:9px;height:9px;border-radius:50%;background:#3a4450}
+.sql-dot i:first-child{background:var(--accent)}
+.t-k{color:#7fb0ff;font-weight:700}.t-f{color:#f2a65a;font-weight:600}.t-s{color:#9fdc8a}.t-n{color:#e7c06b}.t-p{color:#c9a7ff;font-style:italic}
+.sql + .rs{margin-top:14px}
+
+/* ---------- result grid ---------- */
+.rs{margin-top:30px;margin-bottom:0}
+.rs .sql-k{background:color-mix(in srgb,var(--accent) 16%,var(--paper-2));color:var(--ink-2)}
+.rs-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;background:var(--paper-2);border:1px solid var(--rule);border-top:0}
+.rs table,.opt table{width:100%;border-collapse:collapse;font:400 14.5px/1.45 var(--mono);color:var(--ink)}
+.rs th,.opt th{text-align:left;font:700 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:none;color:var(--muted);padding:11px 14px;border-bottom:2px solid var(--ink);white-space:nowrap}
+.rs td{padding:8px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
+.rs tr.el td{color:var(--muted);text-align:left}
+.rs tbody tr:hover td{background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.rs-foot{margin:0;padding:9px 14px;font:500 12.5px var(--mono);color:var(--muted);background:var(--paper-2);border:1px solid var(--rule);border-top:0;border-radius:0 0 12px 12px}
+.rs:not(:has(.rs-foot)) .rs-scroll{border-radius:0 0 12px 12px}
+
+/* ---------- reference tables ---------- */
+.opt{margin-top:30px}
+.opt .rs-scroll{border-top:1px solid var(--rule);border-radius:12px}
+.opt th{background:color-mix(in srgb,var(--accent) 12%,var(--paper-2))}
+.opt td{padding:12px 14px;border-bottom:1px solid var(--rule);font:400 16px/1.45 var(--read);vertical-align:top}
+.opt td.mono{font:700 15.5px/1.45 var(--mono);color:var(--accent);white-space:nowrap}
+.opt tr:last-child td{border-bottom:0}
+
+/* ---------- syntax glossary ---------- */
+.syn{margin-top:30px}
+.syn-k{margin:0 0 10px;font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.syn dl{margin:0;border-top:1px solid var(--rule)}
+.syn-r{display:grid;grid-template-columns:minmax(120px,210px) minmax(0,1fr);gap:18px;padding:13px 0;border-bottom:1px solid var(--rule)}
+.syn dt code{font:700 15.5px var(--mono);color:var(--accent);word-break:break-word}
+.syn dd{margin:0;font:400 18px/1.55 var(--read);color:var(--ink-2)}
+
+/* ---------- bullets + sub-heads ---------- */
+.blist{margin:1.2em 0 0;padding:0;list-style:none}
+.blist li{position:relative;padding:10px 0 10px 30px;font:400 clamp(18px,1.4vw,20px)/1.6 var(--read);color:var(--ink-2);border-bottom:1px dashed var(--rule)}
+.blist li::before{content:"";position:absolute;left:4px;top:1.15em;width:10px;height:10px;background:var(--accent);transform:rotate(45deg) scale(.8)}
+.sub-h{margin:56px 0 0;font:700 clamp(23px,2vw,30px)/1.15 var(--display);letter-spacing:-.025em;color:var(--ink)}
+.sub-h::before{content:"";display:block;width:36px;height:4px;background:var(--accent);margin-bottom:14px}
+
+/* ---------- diagram extras ---------- */
+.pyr-svg .grid line,.pyr-svg .grid rect{stroke:var(--ink);stroke-width:1.2;fill:none;opacity:.55}
+.pyr-svg .lbl{font:600 18px var(--mono);fill:var(--muted);text-anchor:middle}
+.tier text{font-family:var(--display);font-weight:700}
+
+/* ---------- labs ---------- */
+.lab{margin-top:36px}
+.lab > *{background:var(--paper-2)}
+.lab-k{display:flex;align-items:center;gap:10px;margin:0;padding:12px 18px;border:1px solid var(--rule);border-bottom:0;border-radius:14px 14px 0 0;
+  font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.lab-k svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lab-b{padding:20px 18px 22px;border:1px solid var(--rule);border-radius:0 0 14px 14px}
+.lab-q{margin:0 0 14px;padding:12px 14px;background:var(--code-bg);color:var(--code-ink);border-radius:8px;font:500 14.5px/1.6 var(--mono);overflow-x:auto;white-space:pre}
+.lab-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.lab-btn{min-height:44px;padding:0 16px;border:1.5px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);font:600 14px var(--mono);cursor:pointer;transition:background .25s,color .25s}
+.lab-btn[aria-pressed="true"],.lab-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.lab-btn:focus-visible,.lab-in:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.lab-in{min-height:44px;padding:0 14px;border:1.5px solid var(--ink);border-radius:10px;background:#fff;color:var(--ink);font:600 16px var(--mono);width:min(220px,100%)}
+.lab-lbl{font:600 13px var(--mono);color:var(--muted)}
+.lab-list{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.lab-list li{padding:8px 13px;border:1px solid var(--rule);border-radius:8px;font:500 15px var(--mono);color:var(--muted);background:#fff;transition:all .3s}
+.lab-list li.hit{background:var(--accent);border-color:var(--accent);color:#fff}
+.lab-list li.gone{opacity:.25;text-decoration:line-through}
+.lab-out{margin:14px 0 0;font:600 14px var(--mono);color:var(--ink-2)}
+.lab-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lab-cell{padding:14px;border:1px solid var(--rule);border-radius:10px;background:#fff}
+.lab-cell b{display:block;font:600 12px var(--mono);color:var(--muted);margin-bottom:6px}
+.lab-cell span{font:700 clamp(18px,2vw,24px) var(--mono);color:var(--accent);word-break:break-all}
+@media (max-width:760px){
+  .syn-r{grid-template-columns:1fr;gap:4px}
+  .lab-grid{grid-template-columns:1fr}
+  .sql pre{font-size:13.5px;padding:16px}
+  .rs table{font-size:13px}
+}
+.cap-svg .tier.on text{fill:var(--accent)}
+.cap-svg .tier text{fill:var(--muted)}
+.ws .w5 i{font-family:var(--mono)}
+.ws .w5{font:700 clamp(34px,4vw,60px)/1 var(--mono)}
+.rs table,.opt table{display:table;width:100%;min-width:100%}
+@media (max-width:760px){ .fp-mast{font-size:clamp(32px,11vw,64px) !important} }
