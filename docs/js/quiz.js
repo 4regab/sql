@@ -1,210 +1,54 @@
-window.QUIZ = {
- s1: [
-  { q: "Which SELECT capability chooses the rows in a table that you want returned by a query?", a: "Selection", d: ["Projection", "Join", "Concatenation"],
-    h: "Look at the first capability in the diagram.", e: "The handout: \"You can use the selection capability in SQL to choose the rows in a table that you want returned by a query.\"" },
-  { q: "Projection lets you choose which part of a table?", a: "The columns returned by your query", d: ["The rows that meet a condition", "The link between two tables", "The order of the rows"],
-    h: "Projection is the vertical slice of the table.", e: "Projection is used \"to choose the columns in a table that you want returned by your query.\"" },
-  { q: "How does a join bring together data stored in different tables?", a: "By creating a link through a column both tables share", d: ["By copying every row of one table into the other", "By sorting both tables on the same column", "By removing duplicate rows from both tables"],
-    h: "Notice the highlighted columns joined by a bar.", e: "Join works \"by creating a link through a column that both the tables share.\"" },
-  { q: "According to the introduction, which SQL statement do you need to extract data from the database?", a: "SELECT", d: ["FROM", "EXTRACT", "DISTINCT"],
-    h: "Read the first sentence of the introduction.", e: "\"To extract data from the database, you need to use the structured query language (SQL) SELECT statement.\"" },
-  { q: "You want only the LastName and Title columns of every employee. Which capability are you using?", a: "Projection", d: ["Selection", "Join", "Restriction"],
-    h: "You are picking columns, not rows.", e: "Choosing columns is projection; choosing rows is selection." }
- ],
- s2: [
-  { q: "In its simplest form, which two clauses must a SELECT statement include?", a: "A SELECT clause and a FROM clause", d: ["A SELECT clause and a WHERE clause", "A FROM clause and an ORDER BY clause", "A SELECT clause and a DISTINCT clause"],
-    h: "Check the two bullets after the syntax box.", e: "SELECT specifies the columns to be displayed and FROM specifies the table containing them." },
-  { q: "In the syntax, what does * do?", a: "Selects all columns", d: ["Suppresses duplicates", "Multiplies two columns", "Gives columns different headings"],
-    h: "See the 'In the syntax' list.", e: "The handout lists \"* selects all columns\"." },
-  { q: "What is \"SELECT * FROM emp\" called in this course?", a: "A statement", d: ["A keyword", "A clause", "An alias"],
-    h: "See the NOTE about keyword, clause and statement.", e: "\"A statement is a combination of two or more clauses. For example. SELECT * FROM emp is a SQL statement.\"" },
-  { q: "Which of these is NOT one of the rules for writing SQL statements?", a: "Keywords may be abbreviated to save typing", d: ["SQL statements can be entered on one or many lines", "Clauses are usually placed on separate lines", "Tabs and indents can be used for readability"],
-    h: "One rule is about keywords being split or shortened.", e: "\"Keywords cannot be split across lines or abbreviated.\"" },
-  { q: "The Region example returned how many rows?", a: "Four, one for each region", d: ["Two, one for each column", "Nine, one for each employee", "Seventy-seven"],
-    h: "Look at the Region result grid.", e: "\"The table contains four rows, one for each region.\"" },
-  { q: "In the SELECT clause, in what order should you list the columns?", a: "In the order you want them to appear in the output", d: ["In alphabetical order", "In the order they were created in the table", "Primary key first, then the rest"],
-    h: "Read the last paragraph of Selecting Specific Columns.", e: "Specify the columns \"in the order in which you want them to appear in the output.\"" }
- ],
- s3: [
-  { q: "In which clause can you NOT use arithmetic operators?", a: "The FROM clause", d: ["The SELECT clause", "The WHERE clause", "The ORDER BY clause"],
-    h: "See the sentence after the operator table.", e: "\"You can use arithmetic operators in a clause of a SQL statement except the FROM clause.\"" },
-  { q: "What does 10 + 4 * 2 evaluate to under SQL operator precedence?", a: "18", d: ["28", "16", "24"],
-    h: "Multiplication and division take priority.", e: "4 * 2 is evaluated first (8), then 10 + 8 = 18." },
-  { q: "Which operator performs modulus division?", a: "%", d: ["/", "*", "-"],
-    h: "Check the Arithmetic Operators table.", e: "The table lists % as Modulus Division." },
-  { q: "What is a null value?", a: "A value that is unavailable, unassigned, unknown, or inapplicable", d: ["A value equal to zero", "A value made of a single space", "A value that was deleted by DISTINCT"],
-    h: "Read Defining a Null Value.", e: "\"A null value is not the same as zero or a space.\"" },
-  { q: "UnitPrice is NULL for one product. What does UnitPrice + 100 return for that row?", a: "NULL", d: ["100", "0", "An error"],
-    h: "Look at Grandma's Boysenberry in the result.", e: "\"Arithmetic expressions containing a null value evaluate to null.\"" },
-  { q: "By default, what column header is shown for UnitPrice +10?", a: "No column header (No column name)", d: ["UnitPrice", "UnitPrice +10", "NewPrice"],
-    h: "See the explanation under the first result grid.", e: "\"By default, if an arithmetic expression is used in an SQL statement, no column header will be displayed.\"" }
- ],
- s4: [
-  { q: "What does a column alias do?", a: "Renames a column heading", d: ["Renames the table permanently", "Creates a new column in the table", "Removes duplicate column values"],
-    h: "Read the first bullet of the section.", e: "A column alias \"Renames a column heading\" and is useful with calculations." },
-  { q: "Why is 'Emp No.' enclosed in quotes or brackets?", a: "It contains special characters such as a space and a period", d: ["Because it is a number", "Because aliases must always be quoted", "Because it comes before the FROM clause"],
-    h: "See the note after the Emp No. example.", e: "\"Since the alias contains special characters such as space and period, the alias should be enclosed with single quote or square bracket.\"" },
-  { q: "Which operator does this handout use for concatenation?", a: "+", d: ["||", "&amp;", "%"],
-    h: "Check the Concatenation Operator paragraph.", e: "The handout uses the concatenation operator ( + )." },
-  { q: "What does SELECT LastName+Title AS EmployeeJob return for Davolio?", a: "DavolioSales Representative", d: ["Davolio Sales Representative", "Davolio, Sales Representative", "EmployeeJob"],
-    h: "No space literal was added between the columns.", e: "The columns are combined into one output column with nothing between them." },
-  { q: "How must date and character literal values be written in the SELECT list?", a: "Enclosed within single quotation marks", d: ["Enclosed within square brackets", "Preceded by the AS keyword", "Written without any quotes"],
-    h: "Read Literal Character Strings.", e: "\"Date and character literal values must be enclosed within single quotation marks.\"" },
-  { q: "Is the AS keyword required before an alias?", a: "No, it is optional; the result is the same", d: ["Yes, or the query fails", "Only for numeric columns", "Only when the alias has spaces"],
-    h: "See the explanation after the NewPrice example.", e: "\"The result of the query would be the same whether the AS keyword is used or not.\"" }
- ],
- s5: [
-  { q: "By default, does a query eliminate duplicate rows?", a: "No, all rows including duplicates are displayed", d: ["Yes, always", "Only when ORDER BY is used", "Only for text columns"],
-    h: "Read the first paragraph of Duplicate Rows.", e: "\"The default display of queries is all rows, including duplicate rows.\"" },
-  { q: "Where must DISTINCT be placed?", a: "Immediately after the SELECT keyword", d: ["After the FROM clause", "At the end of the statement", "Before each column name"],
-    h: "See Eliminating Duplicate Rows.", e: "Include DISTINCT \"in the SELECT clause immediately after the SELECT keyword.\"" },
-  { q: "SELECT DISTINCT Title FROM Employees returns how many rows?", a: "4", d: ["9", "6", "1"],
-    h: "Try the DISTINCT toggle.", e: "The table has 9 rows \"but there are only four unique Title in the table.\"" },
-  { q: "With several columns after DISTINCT, what is unique in the result?", a: "The combination of all the selected columns", d: ["Only the first column", "Only the last column", "Each column separately"],
-    h: "DISTINCT affects all selected columns.", e: "\"The result represents a distinct combination of the columns.\"" },
-  { q: "DISTINCT removes duplicates based on what?", a: "The column list results, not the source table", d: ["The source table, not the results", "The primary key only", "The first column only"],
-    h: "See Understanding DISTINCT.", e: "\"Removes duplicates based on column list results, not source table.\"" }
- ],
- s6: [
-  { q: "Which clause restricts the rows returned by a query?", a: "WHERE", d: ["FROM", "ORDER BY", "DISTINCT"],
-    h: "It directly follows the FROM clause.", e: "\"You can restrict the rows returned from the query by using the WHERE clause.\"" },
-  { q: "Where does the WHERE clause go?", a: "Directly after the FROM clause", d: ["Directly after the SELECT keyword", "After the ORDER BY clause", "Before the SELECT clause"],
-    h: "Look at the syntax box.", e: "A WHERE clause \"contains a condition that must be met, and it directly follows the FROM clause.\"" },
-  { q: "Which is NOT one of the three elements of a WHERE clause?", a: "Table alias", d: ["Column name", "Comparison operator", "Column name, constant, or list of values"],
-    h: "Check the three bullets.", e: "The three elements are column name, comparison operator, and column name, constant, or list of values." },
-  { q: "How should a number constant be written in a WHERE condition?", a: "Without single quotation marks", d: ["In single quotation marks", "In double quotation marks", "In square brackets"],
-    h: "Read Character Strings and Dates.", e: "Strings and dates must be in single quotes. \"Number constants, however, should not.\"" },
-  { q: "In the department example, which rows are returned?", a: "Only rows with a value of 10 in DEPTNO", d: ["All rows sorted by DEPTNO", "Rows with DEPTNO above 10", "Only the first three rows"],
-    h: "Compare the two EMPLOYEE grids.", e: "\"The highlighted set of rows with a value of 10 in DEPTNO column are the only ones returned.\"" }
- ],
- s7: [
-  { q: "Which operators mean 'not equal to'?", a: "&lt;&gt; and !=", d: ["=! and &gt;&lt;", "!&gt; and !&lt;", "&lt;= and &gt;="], 
-    h: "See the last row of the operator table.", e: "The table lists &lt;&gt;,!= as Not equal to." },
-  { q: "Orders from July 1, 2007 up to December 31, 2007 are found with which condition?", a: "Orderdate &gt;= '07-01-2007' AND Orderdate &lt; '01-01-2008'", d: ["Orderdate &gt; '07-01-2007' AND Orderdate &lt; '12-31-2007'", "Orderdate &lt; '07-01-2007'", "Orderdate = '07-01-2007' OR '01-01-2008'"],
-    h: "Look at the third example query.", e: "That query retrieves orders from July 1, 2007 up to December 31, 2007." },
-  { q: "Why can't the WHERE clause use an alias declared in the SELECT clause?", a: "WHERE is processed before the SELECT list aliases exist", d: ["Aliases only work with numbers", "Aliases must be in brackets", "WHERE comes after ORDER BY"],
-    h: "WHERE follows FROM and precedes other clauses.", e: "The handout: WHERE clause follows FROM, precedes other clauses, so it \"Can't see aliases declared in SELECT clause.\"" },
-  { q: "Which rows does a WHERE predicate accept?", a: "Only rows for which it evaluates to TRUE", d: ["Rows that evaluate to TRUE or UNKNOWN", "Rows that evaluate to FALSE", "All rows, but sorted"],
-    h: "See the predicates rule list.", e: "\"Only rows for which predicate evaluates to TRUE are accepted\"; FALSE or UNKNOWN are filtered out." },
-  { q: "What is a benefit of filtering data server-side?", a: "It can reduce network traffic and client memory usage", d: ["It removes duplicate rows automatically", "It sorts results alphabetically", "It converts data types"],
-    h: "Third rule in the predicates list.", e: "\"Data filtered server-side ... Can reduce network traffic and client memory usage.\"" }
- ],
- s8: [
-  { q: "Are BETWEEN limits inclusive?", a: "Yes, both limits are included", d: ["No, both are excluded", "Only the lower limit is included", "Only the upper limit is included"],
-    h: "Read Using the BETWEEN Operator.", e: "\"Values specified with the BETWEEN operator are inclusive. You must specify the lower limit first.\"" },
-  { q: "Which predicate tests for values in a list?", a: "IN", d: ["LIKE", "BETWEEN", "IS NULL"],
-    h: "Think of City IN ('Tacoma', ...).", e: "\"Use the IN operator to test for values in a list.\"" },
-  { q: "In a LIKE pattern, what does _ denote?", a: "One character", d: ["Zero or many characters", "A space", "The end of the string"],
-    h: "See the two wildcard symbols.", e: "% denotes zero or many characters; _ denotes one character." },
-  { q: "Which pattern finds last names whose second character is E?", a: "'_E%'", d: ["'%E_'", "'E%'", "'%E%'"],
-    h: "Try it in the LIKE tester.", e: "'_E%' matches one character, then E, then anything: Peacock and Leverling." },
-  { q: "Why can't you test for null with =?", a: "A null value cannot be equal or unequal to any value", d: ["= only works on numbers", "NULL must be quoted", "= is not a comparison operator"],
-    h: "Read The IS NULL Operator.", e: "\"You cannot test with (=) because a null value cannot be equal or unequal to any value.\"" },
-  { q: "WHERE LastName LIKE '%ha%' returns which employees?", a: "Buchanan and Callahan", d: ["Davolio and Dodsworth", "King and Leverling", "Peacock and Leverling"],
-    h: "%ha% means 'contains ha'.", e: "Buchanan and Callahan both contain \"ha\"." }
- ],
- s9: [
-  { q: "What does AND require?", a: "Both conditions to be TRUE", d: ["Either condition to be TRUE", "The following condition to be FALSE", "Neither condition to be TRUE"],
-    h: "See the AND | OR split.", e: "\"AND requires both conditions to be TRUE.\"" },
-  { q: "What is the order of evaluation?", a: "Comparison operators, NOT, AND, OR", d: ["OR, AND, NOT, comparison operators", "NOT, comparison operators, OR, AND", "AND, OR, NOT, comparison operators"],
-    h: "See the Rules of Precedence table.", e: "1 All comparison operators, 2 NOT, 3 AND, 4 OR." },
-  { q: "Without parentheses, the Sales Representative OR Sales Manager AND London query returns which Seattle employee?", a: "Davolio", d: ["Buchanan", "Fuller", "No one from Seattle"],
-    h: "AND is evaluated before OR.", e: "It reads as Sales Manager in London, or any Sales Representative, so Davolio (Seattle) is included." },
-  { q: "How do you override the rules of precedence?", a: "Use parentheses", d: ["Use the NOT operator", "Put OR first", "Use ORDER BY"],
-    h: "First line of Rules of Precedence.", e: "\"Override rules of precedence by using parentheses.\"" },
-  { q: "The OR example (Sales Representative OR London) includes Buchanan because...", a: "He lives in London, even though he is a Sales Manager", d: ["He is a Sales Representative", "Both conditions are true for him", "OR ignores the City condition"],
-    h: "With OR only one condition must be true.", e: "OR requires either condition to be TRUE; Buchanan meets City = 'London'." },
-  { q: "Which is a valid use of NOT shown in the handout?", a: "WHERE ReportsTo IS NOT NULL", d: ["WHERE ReportsTo NOT = NULL", "WHERE NOT NULL ReportsTo", "WHERE ReportsTo IS NULL NOT"],
-    h: "See the fragments after the NOTE.", e: "The NOT operator can also be used with BETWEEN, LIKE, and NULL, e.g. IS NOT NULL." }
- ],
- s10: [
-  { q: "Where must the ORDER BY clause be placed?", a: "Last", d: ["Right after SELECT", "Right after FROM", "Before WHERE"],
-    h: "Read Using ORDER BY.", e: "\"If you use the ORDER BY clause, you must place last.\"" },
-  { q: "What is the default sort order?", a: "Ascending (ASC)", d: ["Descending (DESC)", "The order rows were inserted", "Random"],
-    h: "See the ASC entry in the syntax list.", e: "ASC \"orders the rows in ascending order (this is the default order).\"" },
-  { q: "In an ascending sort, where are null values displayed?", a: "Last", d: ["First", "In the middle", "They are removed"],
-    h: "See the fourth item of Default Ordering of Data.", e: "\"Null values are displayed last for ascending sequences and first for descending sequences.\"" },
-  { q: "Without ORDER BY, what order do query rows come back in?", a: "The order is undefined", d: ["Ascending by the first column", "Ascending by primary key", "Alphabetical by last name"],
-    h: "Read the big quotation.", e: "\"The order of rows returned in a query result is undefined.\"" },
-  { q: "Can you sort by a column that is not in the SELECT clause?", a: "Yes", d: ["No, it causes an error", "Only with DESC", "Only if it has an alias"],
-    h: "See the NOTE under Sorting by Multiple Columns.", e: "\"You can sort columns that are not included in the SELECT clause.\"" },
-  { q: "ORDER BY HireDate DESC lists whom first?", a: "Dodsworth, the most recently hired", d: ["Leverling, the earliest hired", "Fuller, the Vice President", "Davolio, employee ID 1"],
-    h: "DESC reverses the order.", e: "The example \"sorts the result by the most recently hired employee\", starting with Dodsworth (1994-11-15)." }
- ],
- s11: [
-  { q: "What does a function always return?", a: "A value", d: ["A table", "A list of rows", "Nothing unless asked"],
-    h: "See the Output step of the diagram.", e: "\"SQL functions may accept arguments and always return a value.\"" },
-  { q: "Why can a function be embedded in an expression?", a: "Because it is self-contained", d: ["Because it has no parameters", "Because it returns many values", "Because it changes the table"],
-    h: "Read the last step of the diagram.", e: "\"The beauty of a function is that it is self-contained and can thus be embedded in an expression.\"" },
-  { q: "Multiple-row functions give...", a: "One result per group of rows", d: ["One result per row", "One result per column", "One result per table join"],
-    h: "See the Single | Multiple split.", e: "\"These functions manipulate groups of rows to give one result per group of rows.\"" },
-  { q: "Which is NOT listed as a kind of single-row function?", a: "Aggregate", d: ["String", "Date", "Conversion"],
-    h: "Check the list under Types of Functions.", e: "Single-row functions listed: String, Number, Date, Conversion." },
-  { q: "Which is a listed use of SQL functions?", a: "Convert column datatypes", d: ["Create new tables", "Grant user permissions", "Back up the database"],
-    h: "See the SQL Functions list.", e: "Functions can perform calculations, modify data items, manipulate groups, format dates and numbers, and convert column datatypes." }
- ],
- s12: [
-  { q: "How many results does a single-row function return?", a: "One result per row", d: ["One result per group", "One result per query", "One result per column"],
-    h: "See Features of single-row functions.", e: "Single-row functions \"Return one result per row\"." },
-  { q: "In which clauses can single-row functions be used?", a: "SELECT, WHERE, and ORDER BY", d: ["Only SELECT", "Only WHERE", "Only FROM"],
-    h: "Last feature in the list.", e: "They \"Can be used in SELECT, WHERE, and ORDER BY clauses; can be nested.\"" },
-  { q: "Which is NOT an argument type for a single-row function?", a: "A whole database", d: ["User-supplied constant", "Column name", "Expression"],
-    h: "Check the argument list.", e: "Arguments can be a user-supplied constant, variable value, column name, or expression." },
-  { q: "UPPER(LastName) for Fuller returns...", a: "FULLER", d: ["fuller", "Fuller", "F"],
-    h: "Look at the case conversion result.", e: "UPPER converts a string to upper-case." },
-  { q: "Which function group operates on values of the date datatype?", a: "Date functions", d: ["String functions", "Number functions", "Conversion functions"],
-    h: "See the grouped story.", e: "\"Date functions: Operate on values of the date datatype.\"" }
- ],
- s13: [
-  { q: "LEN('Sales Manager') returns...", a: "13", d: ["12", "2", "14"],
-    h: "See the LEN result grid.", e: "LEN returns the number of characters; Sales Manager has 13." },
-  { q: "LEFT('Inside Sales Coordinator', 4) returns...", a: "Insi", d: ["ator", "Insid", "Sale"],
-    h: "LEFT counts from the left.", e: "LEFT returns the part of a string from the left: Insi." },
-  { q: "Which function removes leading blanks?", a: "LTRIM", d: ["RTRIM", "REPLACE", "SUBSTRING"],
-    h: "L for left, the start of the string.", e: "LTRIM \"Returns a character expression after removing leading blanks.\"" },
-  { q: "SUBSTRING('Margaret', 2, 5) returns...", a: "argar", d: ["Marga", "garet", "arga"],
-    h: "Start at position 2, take 5 characters.", e: "The result grid shows Margaret becoming argar." },
-  { q: "REPLICATE(FirstName, 2) for Janet returns...", a: "JanetJanet", d: ["Janet Janet", "Ja", "JJanet"],
-    h: "REPLICATE repeats the expression.", e: "REPLICATE \"Repeats a character expression for a specified number of times.\"" },
-  { q: "CHARINDEX('ale', 'Sales Manager') returns...", a: "2", d: ["1", "9", "0"],
-    h: "It returns a starting position.", e: "\"ale\" starts at position 2 in Sales Manager." }
- ],
- s14: [
-  { q: "CEILING(-123.45) returns...", a: "-123", d: ["-124", "123", "-123.5"],
-    h: "Smallest integer greater than or equal to the value.", e: "-123 is the smallest integer greater than -123.45." },
-  { q: "FLOOR(-123.45) returns...", a: "-124", d: ["-123", "124", "-123.4"],
-    h: "Largest integer less than or equal to the value.", e: "-124 is the largest integer less than -123.45." },
-  { q: "ROUND(748.58, -2) returns...", a: "700.00", d: ["750.00", "800.00", "748.60"],
-    h: "A negative length rounds left of the decimal point.", e: "The handout shows ROUND(748.58, -2) as 700.00." },
-  { q: "POWER(3,4) returns...", a: "81", d: ["12", "64", "7"],
-    h: "3 raised to the 4th power.", e: "The handout shows POWER (3,4) as 81." },
-  { q: "ROUND(45.923, 0) returns...", a: "46", d: ["45", "45.9", "50"],
-    h: "See the ROUND query result.", e: "ROUND(45.923,0) is 46 in the result grid." },
-  { q: "What does ABS(-1.0) return?", a: "1.0", d: ["-1.0", "0", "NULL"],
-    h: "Absolute value.", e: "ABS returns the absolute value of the number: 1.0." }
- ],
- s15: [
-  { q: "Which function returns the current system date and time?", a: "GETDATE", d: ["DATEPART", "DATENAME", "DATEADD"],
-    h: "See the first date function.", e: "GETDATE \"Returns the current system date and time.\"" },
-  { q: "DATEADD(mm, 2, '1992-05-01') returns...", a: "1992-07-01", d: ["1992-05-03", "1994-05-01", "1992-05-01"],
-    h: "mm means month.", e: "Adding 2 months to the hire date gives the AddMonth column: 1992-07-01." },
-  { q: "Which function returns the number of date and time boundaries crossed between two dates?", a: "DATEDIFF", d: ["DATEADD", "DATEPART", "DATENAME"],
-    h: "Diff means difference.", e: "DATEDIFF \"Returns the number of date and time boundaries crossed between two specified dates.\"" },
-  { q: "DATENAME returns the datepart as...", a: "A character string", d: ["An integer", "A datetime value", "A money value"],
-    h: "Compare DATENAME and DATEPART.", e: "DATENAME returns a character string; DATEPART returns an integer." },
-  { q: "Which abbreviation stands for minute?", a: "mi, n", d: ["mm, m", "hh", "min"],
-    h: "See the datepart table.", e: "Minute is mi, n; mm, m is Month." }
- ],
- s16: [
-  { q: "Which two functions explicitly convert data to another data type?", a: "CAST and CONVERT", d: ["CAST and ROUND", "CONVERT and REPLACE", "DATEPART and CAST"],
-    h: "Read the start of Conversion Functions.", e: "\"CAST and CONVERT are used to explicitly convert data to other data type.\"" },
-  { q: "Why does ProductName + ' unit price is ' + UnitPrice fail?", a: "UnitPrice is money, and SQL won't concatenate a non-string type", d: ["ProductName is a number", "The + operator only adds numbers", "The alias is missing"],
-    h: "Read 'What is Wrong with this Statement?'.", e: "\"SQL does not allow to concatenate non string datatype.\"" },
-  { q: "How is that error fixed?", a: "CAST(UnitPrice AS VARCHAR(20))", d: ["CAST(ProductName AS MONEY)", "ROUND(UnitPrice, 2)", "UPPER(UnitPrice)"],
-    h: "Convert the price to varchar.", e: "\"To solve the error, we should convert the Unit Price data type to varchar.\"" },
-  { q: "In CONVERT, what does the style argument control?", a: "The date format used to convert datetime data to character data", d: ["The font of the output", "The length of the result", "The sort order"],
-    h: "See the CONVERT syntax list.", e: "Style \"Is the style of date format used to convert datetime or smalldatetime data to character data.\"" },
-  { q: "CONVERT(varchar(20), birthdate, 3) for 1948-12-08 gives...", a: "08/12/48", d: ["12/08/48", "08 Dec 48", "Dec  8 1948"],
-    h: "Style 3 is the dd/mm/yy column.", e: "The dd/mm/yy column shows 08/12/48." }
- ]
-};
+/* quiz.js: multiple-choice quiz with instant feedback and a saved best score. */
+import { esc, hl } from './ui.js';
+
+/* Plain text with two small marks: **bold** and `code`. Everything else is escaped. */
+export const rich = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+export const PASS = 0.75;
+
+export function mountQuiz(host, qs, saved, onDone) {
+  let i = 0, score = 0;
+  const shuffle = a => { const b = a.slice(); for (let j = b.length - 1; j > 0; j--) { const k = Math.floor(Math.random() * (j + 1)); [b[j], b[k]] = [b[k], b[j]]; } return b; };
+
+  function draw() {
+    if (i >= qs.length) return finish();
+    const q = qs[i], tf = q.o.length === 2 && /^(True|False)$/.test(q.o[0]);
+    const order = tf ? q.o.map((_, n) => n) : shuffle(q.o.map((_, n) => n));
+    host.innerHTML = `<div class="quiz"><p class="qn"><span>Question ${i + 1} of ${qs.length}</span><span class="qbar" aria-hidden="true"><i style="width:${(i / qs.length) * 100}%"></i></span></p>
+      <p class="qq" id="qq">${rich(q.q)}</p>${q.code ? `<pre class="sql"><code>${hl(q.code)}</code></pre>` : ''}
+      <div class="opts" role="group" aria-labelledby="qq">${order.map(n => `<button type="button" class="opt" data-n="${n}">${rich(q.o[n])}</button>`).join('')}</div>
+      <div class="fb" aria-live="polite"></div></div>`;
+    host.querySelector('.opts').addEventListener('click', e => {
+      const b = e.target.closest('.opt'); if (!b || b.disabled) return;
+      const pick = +b.dataset.n, right = pick === q.a;
+      if (right) score++;
+      host.querySelectorAll('.opt').forEach(o => {
+        o.disabled = true;
+        if (+o.dataset.n === q.a) o.classList.add('good');
+        else if (o === b) o.classList.add('bad');
+      });
+      const fb = host.querySelector('.fb');
+      fb.className = 'fb ' + (right ? 'ok' : 'no');
+      fb.innerHTML = `<p><b>${right ? 'Correct.' : 'Not quite.'}</b> ${rich(q.why || '')}</p><button type="button" class="btn pri">${i + 1 < qs.length ? 'Next question' : 'See my score'}</button>`;
+      const next = fb.querySelector('button'); next.focus();
+      next.onclick = () => { i++; draw(); };
+    });
+  }
+  function finish() {
+    const pct = score / qs.length, pass = pct >= PASS;
+    const prev = saved && saved.total ? saved.best / saved.total : 0;
+    onDone(score, qs.length);
+    host.innerHTML = `<div class="quiz done ${pass ? 'pass' : ''}"><p class="big">${score} / ${qs.length}</p>
+      <p>${pass ? 'Well done. This section is complete.' : `You need ${Math.ceil(PASS * qs.length)} correct to pass. Read the section again, watch the pictures, then try once more.`}</p>
+      ${prev > pct ? `<p class="mini">Your best so far: ${saved.best} / ${saved.total}</p>` : ''}
+      <button type="button" class="btn pri" data-r>Try again</button></div>`;
+    host.querySelector('[data-r]').onclick = () => { i = 0; score = 0; draw(); };
+  }
+  i = 0; score = 0;
+  if (saved && saved.total) {
+    host.innerHTML = `<div class="quiz start"><p>${saved.best >= Math.ceil(PASS * saved.total) ? 'Completed' : 'Attempted'}. Best score: <b>${saved.best} / ${saved.total}</b></p><button type="button" class="btn pri" data-s>Take the quiz again</button></div>`;
+    host.querySelector('[data-s]').onclick = draw;
+  } else {
+    host.innerHTML = `<div class="quiz start"><p>${qs.length} questions. You get the answer straight after each one.</p><button type="button" class="btn pri" data-s>Start the quiz</button></div>`;
+    host.querySelector('[data-s]').onclick = draw;
+  }
+}
