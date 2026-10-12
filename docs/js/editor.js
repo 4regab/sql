@@ -18,7 +18,7 @@ const norm = v => (typeof v === 'number' ? +v.toFixed(6) : typeof v === 'string'
 const key = r => JSON.stringify(r.map(norm));
 
 /* Compare the learner's result with the model answer. Returns '' when it matches, or a hint that does not give the answer away. */
-function compare(mine, want, task) {
+function compare(mine, want, task, sql) {
   if (mine.error) return mine.error;
   if (want.error) return 'The model answer failed to run. Please report this.';
   if (mine.headers.length !== want.headers.length) return `Your result has ${mine.headers.length} column(s). The question asks for ${want.headers.length}.`;
@@ -28,21 +28,31 @@ function compare(mine, want, task) {
   }
   if (mine.rows.length !== want.rows.length) return `Your result has ${mine.rows.length} row(s). It should have ${want.rows.length}.`;
   const a = mine.rows.map(key), b = want.rows.map(key);
-  if (task.ordered) { if (a.some((x, i) => x !== b[i])) return 'You have the right rows, but not in the right order. Check ORDER BY.'; return ''; }
-  if (a.slice().sort().join() !== b.slice().sort().join()) return 'The number of rows and columns is right, but some values are different. Check the columns you picked and your condition.';
+  if (task.ordered) { if (a.some((x, i) => x !== b[i])) return 'You have the right rows, but not in the right order. Check ORDER BY.'; }
+  else if (a.slice().sort().join() !== b.slice().sort().join()) return 'The number of rows and columns is right, but some values are different. Check the columns you picked and your condition.';
+  const miss = (task.need || []).find(w => !uses(sql, w));
+  if (miss) return `Your result is right, but this question asks you to use ${miss}. Write it that way, as you would in the exam.`;
   return '';
+}
+
+/* Does the query use this keyword or phrase? Text in quotes and comments does not count. */
+export function uses(sql, w) {
+  const bare = sql.replace(/'(?:[^']|'')*'?|--[^\n]*/g, ' ');
+  const e = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+  return new RegExp(`${/^\w/.test(w) ? '\\b' : ''}${e}${/\w$/.test(w) ? '\\b' : ''}`, 'i').test(bare);
 }
 
 export function mountEditor(host, o, store) {
   const task = o.task, id = o.id;
   let fails = 0;
+  // o.bare: used inside a quiz. The quiz shows the question itself, and there is no Watch button, like in an exam.
   host.innerHTML = `<div class="try">
-    ${task ? `<p class="task"><b>Exercise.</b> ${rich(task.q)}</p>` : ''}
+    ${task && !o.bare ? `<p class="task"><b>Exercise.</b> ${rich(task.q)}</p>` : ''}
     <label class="sr" for="ed-${id}">SQL query</label>
     <textarea id="ed-${id}" class="ed mono" rows="${Math.min(10, Math.max(3, (o.sql || '').split('\n').length + 1))}" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" placeholder="${task ? 'Write your query here' : ''}">${esc(o.sql || '')}</textarea>
     <div class="bar"><button type="button" class="btn pri" data-a="run">${ic('play')} Run</button>
       ${task ? `<button type="button" class="btn" data-a="check">${ic('ok')} Check answer</button>` : ''}
-      <button type="button" class="btn" data-a="watch">Watch it run</button>
+      ${o.bare ? '' : '<button type="button" class="btn" data-a="watch">Watch it run</button>'}
       <button type="button" class="btn ghost" data-a="reset">Reset</button>
       <button type="button" class="btn ghost" data-a="tables" aria-expanded="false">Tables</button></div>
     <div class="fbk" aria-live="polite"></div>
@@ -68,7 +78,7 @@ export function mountEditor(host, o, store) {
       if (open && !tbls.innerHTML) tbls.innerHTML = tablesHtml();
     }
     if (a === 'check') {
-      const mine = run(), want = D.run(task.a), why = compare(mine, want, task);
+      const mine = run(), want = D.run(task.a), why = compare(mine, want, task, ta.value);
       if (!why) {
         fbk.className = 'fbk ok'; fbk.innerHTML = `<p><b>Correct.</b> ${task.why ? rich(task.why) : 'Your result matches.'}</p>`;
         store.task(id);
@@ -77,7 +87,7 @@ export function mountEditor(host, o, store) {
         fbk.innerHTML = `<p><b>Not yet.</b> ${esc(why)}</p>` + (fails >= 2 ? '<button type="button" class="btn ghost" data-a="sol">Show a model answer</button>' : '');
       }
     }
-    if (a === 'sol') { fbk.innerHTML = `<p><b>One model answer:</b></p><pre class="sql"><code>${hl(task.a)}</code></pre>${task.why ? `<p>${rich(task.why)}</p>` : ''}`; fbk.className = 'fbk'; }
+    if (a === 'sol') { if (store.sol) store.sol(id); fbk.innerHTML = `<p><b>One model answer:</b></p><pre class="sql"><code>${hl(task.a)}</code></pre>${task.why ? `<p>${rich(task.why)}</p>` : ''}`; fbk.className = 'fbk'; }
   });
   ta.addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); fbk.innerHTML = ''; run(); } });
 }

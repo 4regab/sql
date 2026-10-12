@@ -1,4 +1,4 @@
-/* app.js: pages, menu, progress. Hash routes: #/ (home), #/s/<section>, #/r/<lesson review>. */
+/* app.js: pages, menu, progress. Hash routes: #/ (home), #/s/<section>, #/r/<lesson review>, #/x/<lesson exam practice>. */
 import * as D from './db.js';
 import { LESSONS } from './content.js';
 import { mountStepper } from './stepper.js';
@@ -15,6 +15,7 @@ const UNITS = [];
 LESSONS.forEach(L => {
   L.sections.forEach((s, i) => UNITS.push({ id: s.id, kind: 's', L, s, i, href: `#/s/${s.id}`, title: s.title, qs: s.quiz }));
   UNITS.push({ id: 'r-' + L.id, kind: 'r', L, href: `#/r/${L.id}`, title: 'Lesson review', qs: L.review.quiz });
+  UNITS.push({ id: 'x-' + L.id, kind: 'x', L, href: `#/x/${L.id}`, title: 'Exam practice', qs: L.exam.qs });
 });
 const KEY = 'sqlsite.v1';
 const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
@@ -72,12 +73,12 @@ function blocks(root, list, id) {
 }
 function pager(i) {
   const prev = UNITS[i - 1], next = UNITS[i + 1];
-  return `<nav class="pager" aria-label="Previous and next">${prev ? `<a class="btn" href="${prev.href}" rel="prev"><small>Previous</small><span>${esc(prev.title)}</span></a>` : '<span></span>'}${next ? `<a class="btn pri" href="${next.href}" rel="next"><small>Next</small><span>${esc(next.kind === 'r' ? `Lesson ${next.L.n} review` : next.title)}</span></a>` : '<a class="btn pri" href="#/"><small>Finished</small><span>Back to the start</span></a>'}</nav>`;
+  return `<nav class="pager" aria-label="Previous and next">${prev ? `<a class="btn" href="${prev.href}" rel="prev"><small>Previous</small><span>${esc(prev.title)}</span></a>` : '<span></span>'}${next ? `<a class="btn pri" href="${next.href}" rel="next"><small>Next</small><span>${esc(next.kind === 'r' ? `Lesson ${next.L.n} review` : next.kind === 'x' ? `Lesson ${next.L.n} exam practice` : next.title)}</span></a>` : '<a class="btn pri" href="#/"><small>Finished</small><span>Back to the start</span></a>'}</nav>`;
 }
 function quizBlock(root, u) {
   const sec = document.createElement('section');
   sec.className = 'quizsec'; sec.id = 'quiz';
-  sec.innerHTML = `<h2>${u.kind === 's' ? 'Section quiz' : 'Lesson quiz'}</h2><div class="host"></div>`;
+  sec.innerHTML = `<h2>${u.kind === 's' ? 'Section quiz' : u.kind === 'x' ? 'Exam practice' : 'Lesson quiz'}</h2><div class="host"></div>`;
   root.append(sec);
   mountQuiz(sec.querySelector('.host'), u.qs, P.quiz[u.id], (s, t) => store.quiz(u.id, s, t));
 }
@@ -134,10 +135,21 @@ function review(lid) {
   quizBlock(art, u);
   art.insertAdjacentHTML('beforeend', pager(i));
 }
+function exam(lid) {
+  const i = UNITS.findIndex(u => u.id === 'x-' + lid);
+  if (i < 0) return home();
+  const u = UNITS[i], { L } = u;
+  document.title = `Lesson ${L.n} exam practice`;
+  P.visited[u.id] = 1; save(); drawNav();
+  app.innerHTML = `<article class="page"><p class="crumb">Lesson ${L.n} · Exam practice</p><h1>Lesson ${L.n} exam practice</h1><p class="lede">${rich(L.exam.intro)}</p></article>`;
+  const art = app.querySelector('.page');
+  quizBlock(art, u);
+  art.insertAdjacentHTML('beforeend', pager(i));
+}
 
 function route() {
   const [, kind, id] = (location.hash || '#/').split('/');
-  if (kind === 's') section(id); else if (kind === 'r') review(id); else home();
+  if (kind === 's') section(id); else if (kind === 'r') review(id); else if (kind === 'x') exam(id); else home();
   drawNav(); setNav(false);
   window.scrollTo(0, 0);
   app.focus({ preventScroll: true });

@@ -87,7 +87,14 @@ const splitComma = items => {
   for (const x of items) { if (x.t === 'op' && x.v === ',') out.push([]); else out[out.length - 1].push(x); }
   return out.map(trim);
 };
-const idsIn = items => items.flatMap(x => (x.g ? idsIn(x.g) : x.t === 'id' || x.t === 'qid' ? [x.v] : []));
+/* Column names used in a token list. A name followed by ( is a function call, such as MONTH(x), so it is skipped. */
+const idsIn = items => items.flatMap((x, i) => {
+  if (x.g) return idsIn(x.g);
+  if (x.t === 'qid') return [x.v];
+  if (x.t !== 'id') return [];
+  const next = items.slice(i + 1).find(y => y.t !== 'ws');
+  return next && next.g ? [] : [x.v];
+});
 
 /* ---------- turning SQL Server style into SQLite ---------- */
 const TEXTFN = new Set(['LOWER', 'UPPER', 'LEFT', 'RIGHT', 'LTRIM', 'RTRIM', 'REPLACE', 'REPLICATE', 'SUBSTRING', 'DATENAME']);

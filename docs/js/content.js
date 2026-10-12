@@ -27,7 +27,9 @@ const L4 = {
         { q: 'Which capability chooses the **rows** a query returns?', o: ['Projection', 'Selection', 'Join', 'Sorting'], a: 1, why: 'Selection restricts the rows. Projection chooses columns.' },
         { q: 'You want only the `LastName` and `City` columns of a table. Which capability is that?', o: ['Selection', 'Join', 'Projection', 'Concatenation'], a: 2, why: 'Choosing columns is projection.' },
         { q: 'A join links two tables through…', o: ['a column both tables share', 'the name of the database', 'the first row of each table', 'an ORDER BY clause'], a: 0, why: 'The shared column is the link between the two tables.' },
-        { q: 'Projection removes the rows that do not meet a condition.', o: ['True', 'False'], a: 1, why: 'That is selection. Projection works on columns.' }
+        { q: 'Projection removes the rows that do not meet a condition.', o: ['True', 'False'], a: 1, why: 'That is selection. Projection works on columns.' },
+        { q: 'Projection: show only the `LastName` and `City` columns of every employee.', a: 'SELECT LastName, City FROM Employees', why: 'You chose two columns, so this is projection. Every row is still there.' },
+        { q: 'Projection again: show the `CompanyName` and `Country` of every customer.', a: 'SELECT CompanyName, Country FROM Customers' }
       ]
     },
     {
@@ -57,7 +59,10 @@ const L4 = {
         { q: 'What must a SELECT statement include, at the very least?', o: ['A SELECT clause and a FROM clause', 'A WHERE clause and an ORDER BY clause', 'Only the word SELECT', 'An asterisk and an alias'], a: 0, why: 'SELECT says which columns. FROM says which table.' },
         { q: 'SQL keywords such as SELECT must be typed in capital letters.', o: ['True', 'False'], a: 1, why: 'SQL statements are not case sensitive, unless indicated. Capitals are just a habit that helps reading.' },
         { q: 'In the handout, `SELECT * FROM emp` is an example of a…', o: ['keyword', 'clause', 'statement', 'column'], a: 2, why: 'A statement combines two or more clauses.' },
-        { q: 'You write `SELECT Title, LastName FROM Employees`. In what order do the columns appear?', o: ['Title, then LastName', 'LastName, then Title', 'The order they have in the table', 'Alphabetical order'], a: 0, why: 'The columns appear in the order you list them in the SELECT clause.' }
+        { q: 'You write `SELECT Title, LastName FROM Employees`. In what order do the columns appear?', o: ['Title, then LastName', 'LastName, then Title', 'The order they have in the table', 'Alphabetical order'], a: 0, why: 'The columns appear in the order you list them in the SELECT clause.' },
+        { q: 'Show every column of the Categories table. Use the asterisk.', a: 'SELECT * FROM Categories', need: ['*'] },
+        { q: 'Show the `CompanyName`, `City` and `Country` of every supplier, in that order.', a: 'SELECT CompanyName, City, Country FROM Suppliers' },
+        { q: 'Show the title, then the first name, of every employee.', a: 'SELECT Title, FirstName FROM Employees', why: 'The columns come out in the order you list them.' }
       ]
     },
     {
@@ -87,7 +92,10 @@ const L4 = {
         { q: 'How do you make SQL work out `3 + 4` before the multiplication?', o: ['Put `3 + 4` in parentheses', 'Put it at the end', 'Use the `%` operator', 'Add an alias'], a: 0, why: 'Parentheses force the part inside to be worked out first.' },
         { q: 'A product has a NULL `UnitPrice`. What does `UnitPrice + 10` give for that product?', o: ['NULL', '10', '0', 'An error'], a: 0, why: 'If any value in an arithmetic expression is null, the result is null.' },
         { q: 'You can use arithmetic operators in the FROM clause.', o: ['True', 'False'], a: 1, why: 'Arithmetic operators can be used in any clause except FROM.' },
-        { q: 'What is the result of dividing a number by NULL?', o: ['NULL', '0', 'An error', '1'], a: 0, why: 'The answer is NULL (unknown). Only dividing by zero gives an error.' }
+        { q: 'What is the result of dividing a number by NULL?', o: ['NULL', '0', 'An error', '1'], a: 0, why: 'The answer is NULL (unknown). Only dividing by zero gives an error.' },
+        { q: 'Show `ProductName`, `UnitPrice`, and the price after taking off 5 (`UnitPrice` minus 5).', a: 'SELECT ProductName, UnitPrice, UnitPrice - 5 FROM Products', why: 'The product with no price gives NULL, because NULL minus 5 is NULL.' },
+        { q: 'Show `ProductName` and the value of the stock: `UnitPrice` times `UnitsInStock`.', a: 'SELECT ProductName, UnitPrice * UnitsInStock FROM Products' },
+        { q: 'Show `ProductName` and the price plus 2, then multiplied by 3. The 2 must be added first.', a: 'SELECT ProductName, (UnitPrice + 2) * 3 FROM Products', why: 'Without parentheses, `2 * 3` would be worked out first.' }
       ]
     },
     {
@@ -112,7 +120,10 @@ const L4 = {
         { q: 'The word `AS` is required before an alias.', o: ['True', 'False'], a: 1, why: 'AS is optional. The result is the same with or without it.' },
         { q: 'Which operator joins text values in the SELECT list (in SQL Server)?', o: ['+', '&', '.', '#'], a: 0, why: 'The concatenation operator is `+`.' },
         { q: 'Why is the space in `FirstName + \' \' + LastName` inside single quotes?', o: ['A character string (literal) must be in single quotes', 'To make it an alias', 'To make it NULL', 'It is optional'], a: 0, why: 'Character and date literals go inside single quotation marks.' },
-        { q: 'In `fname = firstname`, what is `fname`?', o: ['An alias for firstname', 'A table', 'A condition', 'A function'], a: 0, why: 'The equals sign form gives the column the heading on the left.' }
+        { q: 'In `fname = firstname`, what is `fname`?', o: ['An alias for firstname', 'A table', 'A condition', 'A function'], a: 0, why: 'The equals sign form gives the column the heading on the left.' },
+        { q: 'Show `ProductName` and `UnitPrice` times 2. Name the second column **Double Price**.', a: "SELECT ProductName, UnitPrice * 2 AS 'Double Price' FROM Products", headers: true, why: 'The alias has a space, so it needs quotes or square brackets.' },
+        { q: 'Show one column named **Full Name**: the first name, a space, then the last name of each employee.', a: "SELECT FirstName + ' ' + LastName AS 'Full Name' FROM Employees", headers: true },
+        { q: 'Show one column named **Location** for every customer: the city, a comma and a space, then the country (like “Berlin, Germany”).', a: "SELECT City + ', ' + Country AS Location FROM Customers", headers: true }
       ]
     },
     {
@@ -133,7 +144,10 @@ const L4 = {
         { q: 'By default, does a query remove duplicate rows?', o: ['Yes', 'No, it shows all rows including duplicates'], a: 1, why: 'You must ask for DISTINCT.' },
         { q: 'How many rows does this return?', code: 'SELECT DISTINCT Title\nFROM   Employees', o: ['4', '9', '1', '6'], a: 0, why: 'The 9 employees have only four different titles.' },
         { q: 'Where does the DISTINCT keyword go?', o: ['Right after SELECT', 'Right after FROM', 'At the end of the query', 'Before SELECT'], a: 0, why: 'DISTINCT comes immediately after the SELECT keyword.' },
-        { q: 'With `SELECT DISTINCT Title, City`, DISTINCT checks…', o: ['the combination of Title and City', 'Title only', 'City only', 'every column in the table'], a: 0, why: 'It works on the selected columns together.' }
+        { q: 'With `SELECT DISTINCT Title, City`, DISTINCT checks…', o: ['the combination of Title and City', 'Title only', 'City only', 'every column in the table'], a: 0, why: 'It works on the selected columns together.' },
+        { q: 'Show each different city in the Employees table, once.', a: 'SELECT DISTINCT City FROM Employees', need: ['DISTINCT'] },
+        { q: 'Show each different pair of `Country` and `City` in the Suppliers table.', a: 'SELECT DISTINCT Country, City FROM Suppliers', need: ['DISTINCT'] },
+        { q: 'Show each different `CategoryID` used in the Products table.', a: 'SELECT DISTINCT CategoryID FROM Products', need: ['DISTINCT'] }
       ]
     }
   ],
@@ -155,7 +169,24 @@ const L4 = {
       { q: 'Which keyword removes duplicate rows?', o: ['UNIQUE', 'DISTINCT', 'ONLY', 'REMOVE'], a: 1, why: 'DISTINCT goes right after SELECT.' },
       { q: 'What does this show for one employee?', code: "SELECT LastName + ' - ' + Title\nFROM   Employees", o: ['One column with the two values joined by a dash', 'Two columns', 'An error', 'Only the title'], a: 0, why: '`+` joins the text values into one output column.' },
       { q: 'One product has a NULL `UnitPrice`. What is `UnitPrice * 2` for it?', o: ['NULL', '0', '2', 'An error'], a: 0, why: 'Any arithmetic with NULL gives NULL.' },
-      { q: 'Which alias needs quotes or square brackets?', o: ['Hire Date', 'HireDate', 'Cost', 'NewPrice'], a: 0, why: 'It contains a space.' }
+      { q: 'Which alias needs quotes or square brackets?', o: ['Hire Date', 'HireDate', 'Cost', 'NewPrice'], a: 0, why: 'It contains a space.' },
+      { q: 'Show each different employee title once, with the heading **Job**.', a: 'SELECT DISTINCT Title AS Job FROM Employees', headers: true, need: ['DISTINCT'] },
+      { q: 'Show `ProductName` and `UnitPrice` plus 10. Name the second column **New Price**.', a: "SELECT ProductName, UnitPrice + 10 AS 'New Price' FROM Products", headers: true },
+      { q: 'Show one column named **Contact** for every supplier: the contact name, a space, then the contact title in brackets, like “Charlotte Cooper (Purchasing Manager)”.', a: "SELECT ContactName + ' (' + ContactTitle + ')' AS Contact FROM Suppliers", headers: true }
+    ]
+  },
+  exam: {
+    intro: 'Every question here asks you to type the full query, as in the final exam. Run it as often as you like, then press Check answer. A question scores only if you get it right before you open the model answer.',
+    qs: [
+      { q: 'Show all the columns and rows of the Region table.', a: 'SELECT * FROM Region', need: ['*'] },
+      { q: 'Show the employee ID, first name, last name and city of every employee, in that order.', a: 'SELECT EmployeeID, FirstName, LastName, City FROM Employees' },
+      { q: 'Show the product name, unit price, units in stock, and the price times the units in stock with the heading **Stock Value**.', a: "SELECT ProductName, UnitPrice, UnitsInStock, UnitPrice * UnitsInStock AS 'Stock Value' FROM Products", headers: true },
+      { q: 'Show each different country in the Customers table.', a: 'SELECT DISTINCT Country FROM Customers', need: ['DISTINCT'] },
+      { q: 'Show the company name and phone of every supplier, with the headings **Supplier** and **Phone Number**.', a: "SELECT CompanyName AS Supplier, Phone AS 'Phone Number' FROM Suppliers", headers: true },
+      { q: 'Show one column named **Employee** with the title of courtesy, first name and last name, separated by spaces (like “Ms. Nancy Davolio”).', a: "SELECT TitleOfCourtesy + ' ' + FirstName + ' ' + LastName AS Employee FROM Employees", headers: true },
+      { q: 'Show the product name and the price increased by 15% (`UnitPrice` × 1.15), with the heading **New Price**.', a: "SELECT ProductName, UnitPrice * 1.15 AS 'New Price' FROM Products", headers: true },
+      { q: 'Show each different pair of title and country in the Employees table.', a: 'SELECT DISTINCT Title, Country FROM Employees', need: ['DISTINCT'] },
+      { q: 'Show the product name, units in stock, units on order, and the two added together with the heading **Total Units**.', a: "SELECT ProductName, UnitsInStock, UnitsOnOrder, UnitsInStock + UnitsOnOrder AS 'Total Units' FROM Products", headers: true }
     ]
   }
 };
@@ -196,7 +227,10 @@ const L5 = {
         { q: 'Which condition is written correctly?', o: ["WHERE LastName = 'King'", 'WHERE LastName = King', "WHERE 'LastName' = King", "WHERE = 'King'"], a: 0, why: 'Character strings go in single quotation marks.' },
         { q: 'What does `<>` mean?', o: ['Not equal to', 'Greater than', 'Less than or equal to', 'Equal to'], a: 0, why: '`<>` and `!=` both mean not equal to.' },
         { q: 'A row where the WHERE condition is UNKNOWN (for example it involves NULL) is…', o: ['filtered out', 'kept', 'shown with NULL', 'shown last'], a: 0, why: 'Only rows where the condition is TRUE are accepted.' },
-        { q: 'A WHERE clause can use an alias created in the SELECT clause.', o: ['True', 'False'], a: 1, why: 'WHERE runs before SELECT, so it cannot see aliases. ORDER BY runs after, so it can.' }
+        { q: 'A WHERE clause can use an alias created in the SELECT clause.', o: ['True', 'False'], a: 1, why: 'WHERE runs before SELECT, so it cannot see aliases. ORDER BY runs after, so it can.' },
+        { q: 'Show the `CompanyName` and `City` of customers in Germany.', a: "SELECT CompanyName, City FROM Customers WHERE Country = 'Germany'", need: ['WHERE'] },
+        { q: 'Show the `ProductName` and `UnitPrice` of products that cost less than 10.', a: 'SELECT ProductName, UnitPrice FROM Products WHERE UnitPrice < 10', need: ['WHERE'] },
+        { q: 'Show the `LastName` and `HireDate` of employees hired on or after January 1, 1994.', a: "SELECT LastName, HireDate FROM Employees WHERE HireDate >= '01-01-1994'", need: ['WHERE'], why: 'Dates go in single quotes. `>=` keeps January 1 itself.' }
       ]
     },
     {
@@ -230,7 +264,10 @@ const L5 = {
         { q: 'Which pattern finds last names that begin with D?', o: ["'D%'", "'%D'", "'_D'", "'D_'"], a: 0, why: '`D%` means D followed by zero or many characters.' },
         { q: 'Which last name matches this condition?', code: "WHERE LastName LIKE '_E%'", o: ['Peacock', 'Davolio', 'King', 'Fuller'], a: 0, why: 'The second letter must be E. Peacock has “e” as its second letter.' },
         { q: 'How do you find rows where `ReportsTo` has no value?', o: ['ReportsTo IS NULL', 'ReportsTo = NULL', 'ReportsTo = 0', "ReportsTo = ''"], a: 0, why: 'NULL is not equal to anything, so `= NULL` never matches.' },
-        { q: 'Which operator is a short way to write several OR tests on one column?', o: ['IN', 'LIKE', 'BETWEEN', 'IS'], a: 0, why: '`City IN (\'A\', \'B\')` means City = \'A\' OR City = \'B\'.' }
+        { q: 'Which operator is a short way to write several OR tests on one column?', o: ['IN', 'LIKE', 'BETWEEN', 'IS'], a: 0, why: '`City IN (\'A\', \'B\')` means City = \'A\' OR City = \'B\'.' },
+        { q: 'Use BETWEEN. Show the `ProductName` and `UnitPrice` of products priced from 20 to 30, both included.', a: 'SELECT ProductName, UnitPrice FROM Products WHERE UnitPrice BETWEEN 20 AND 30', need: ['BETWEEN'] },
+        { q: 'Use LIKE. Show the `LastName` of employees whose last name begins with the letter D.', a: "SELECT LastName FROM Employees WHERE LastName LIKE 'D%'", need: ['LIKE'] },
+        { q: 'Show the `ProductName` of every product that has no unit price.', a: 'SELECT ProductName FROM Products WHERE UnitPrice IS NULL', need: ['IS NULL'], why: '`= NULL` never matches. Use IS NULL.' }
       ]
     },
     {
@@ -263,7 +300,10 @@ const L5 = {
         { q: 'Which is worked out first, AND or OR?', o: ['AND', 'OR', 'Whichever is on the left', 'They are equal'], a: 0, why: 'The order is: comparisons, NOT, AND, then OR.' },
         { q: 'How does SQL read this?', code: "WHERE Title = 'Sales Representative'\n   OR Title = 'Sales Manager'\n  AND City = 'London'", o: ["Representative OR (Manager AND London)", "(Representative OR Manager) AND London", 'Left to right, one test at a time', 'It is an error'], a: 0, why: 'AND goes first, so it is Representative, OR (Manager AND London).' },
         { q: 'How do you force the OR to run before the AND?', o: ['Put the OR test in parentheses', 'Write it first', 'Use NOT', 'Use DISTINCT'], a: 0, why: 'Parentheses override the rules of precedence.' },
-        { q: 'Which is a valid way to write the opposite of IN?', o: ["City NOT IN ('London')", "City IN NOT ('London')", "NOT City ('London')", "City != IN ('London')"], a: 0, why: 'NOT goes before IN, BETWEEN or LIKE.' }
+        { q: 'Which is a valid way to write the opposite of IN?', o: ["City NOT IN ('London')", "City IN NOT ('London')", "NOT City ('London')", "City != IN ('London')"], a: 0, why: 'NOT goes before IN, BETWEEN or LIKE.' },
+        { q: 'Show the `LastName`, `Title` and `Country` of employees who are Sales Representatives **and** live in the UK.', a: "SELECT LastName, Title, Country FROM Employees WHERE Title = 'Sales Representative' AND Country = 'UK'", need: ['AND'] },
+        { q: 'Show the `ProductName`, `CategoryID` and `UnitPrice` of products that are in category 1 or 2 **and** cost more than 30. Watch the precedence.', a: 'SELECT ProductName, CategoryID, UnitPrice FROM Products WHERE (CategoryID = 1 OR CategoryID = 2) AND UnitPrice > 30', why: 'Without parentheses, AND goes first, and every product in category 1 would be kept whatever its price.' },
+        { q: 'Use NOT LIKE. Show the `ProductName` of products whose name does not begin with C.', a: "SELECT ProductName FROM Products WHERE ProductName NOT LIKE 'C%'", need: ['NOT LIKE'] }
       ]
     },
     {
@@ -295,7 +335,10 @@ const L5 = {
         { q: 'What is the default sort order?', o: ['Ascending', 'Descending', 'Random', 'By table order'], a: 0, why: 'ASC is the default. Add DESC to reverse it.' },
         { q: 'Without ORDER BY, SQL promises the rows come back in a fixed order.', o: ['True', 'False'], a: 1, why: 'There is no guaranteed order without ORDER BY.' },
         { q: 'Can ORDER BY use a column alias?', o: ['Yes, because ORDER BY runs after SELECT', 'No, never', 'Only with DESC', 'Only for numbers'], a: 0, why: 'It is the last clause processed, so the alias already exists.' },
-        { q: 'What does this do?', code: 'ORDER BY FirstName, Title DESC', o: ['Sorts by FirstName A to Z, then ties by Title Z to A', 'Sorts by Title only', 'Sorts both columns Z to A', 'It is an error'], a: 0, why: 'DESC applies only to the column it follows.' }
+        { q: 'What does this do?', code: 'ORDER BY FirstName, Title DESC', o: ['Sorts by FirstName A to Z, then ties by Title Z to A', 'Sorts by Title only', 'Sorts both columns Z to A', 'It is an error'], a: 0, why: 'DESC applies only to the column it follows.' },
+        { q: 'Show the `LastName` and `BirthDate` of every employee, youngest first.', a: 'SELECT LastName, BirthDate FROM Employees ORDER BY BirthDate DESC', ordered: true, need: ['ORDER BY'], why: 'The youngest has the latest birth date, so sort the dates in descending order.' },
+        { q: 'Show the `CompanyName`, `Country` and `City` of every customer, sorted by country, then city, then company name.', a: 'SELECT CompanyName, Country, City FROM Customers ORDER BY Country, City, CompanyName', ordered: true, need: ['ORDER BY'] },
+        { q: 'Show `ProductName` and `UnitPrice` × `UnitsInStock` with the heading **StockValue**. Sort by that alias, largest first, then by product name.', a: 'SELECT ProductName, UnitPrice * UnitsInStock AS StockValue FROM Products ORDER BY StockValue DESC, ProductName', ordered: true, headers: true, need: ['ORDER BY StockValue'], why: 'ORDER BY runs after SELECT, so it can use the alias.' }
       ]
     }
   ],
@@ -320,7 +363,24 @@ const L5 = {
       { q: 'Which clause lists employees from newest hire to oldest?', o: ['ORDER BY HireDate DESC', 'ORDER BY HireDate', 'ORDER BY DESC HireDate', 'WHERE HireDate DESC'], a: 0, why: 'DESC goes after the column name.' },
       { q: 'Why does `WHERE ReportsTo = NULL` return no rows?', o: ['NULL is never equal to anything, not even NULL', 'ReportsTo has no NULLs', 'It needs double quotes', 'ORDER BY is missing'], a: 0, why: 'Use IS NULL.' },
       { q: "`WHERE City = 'London' AND City = 'Seattle'` can return rows.", o: ['True', 'False'], a: 1, why: 'One value cannot be both London and Seattle.' },
-      { q: 'In what order does SQL evaluate these, first to last?', o: ['Comparisons, NOT, AND, OR', 'OR, AND, NOT, comparisons', 'AND, OR, NOT, comparisons', 'NOT, comparisons, OR, AND'], a: 0, why: 'This is the rule of precedence. Parentheses override it.' }
+      { q: 'In what order does SQL evaluate these, first to last?', o: ['Comparisons, NOT, AND, OR', 'OR, AND, NOT, comparisons', 'AND, OR, NOT, comparisons', 'NOT, comparisons, OR, AND'], a: 0, why: 'This is the rule of precedence. Parentheses override it.' },
+      { q: 'Show the `ProductName` and `UnitPrice` of products in category 3 that cost less than 15, cheapest first, then by name.', a: 'SELECT ProductName, UnitPrice FROM Products WHERE CategoryID = 3 AND UnitPrice < 15 ORDER BY UnitPrice, ProductName', ordered: true },
+      { q: 'Show the `FirstName` and `LastName` of employees whose first name contains “an” anywhere.', a: "SELECT FirstName, LastName FROM Employees WHERE FirstName LIKE '%an%'", need: ['LIKE'] },
+      { q: 'Show the `LastName` and `ReportsTo` of every employee who **has** a manager, in alphabetical order by last name.', a: 'SELECT LastName, ReportsTo FROM Employees WHERE ReportsTo IS NOT NULL ORDER BY LastName', ordered: true, need: ['IS NOT NULL'] }
+    ]
+  },
+  exam: {
+    intro: 'Every question here asks you to type the full query, as in the final exam. Run it as often as you like, then press Check answer. A question scores only if you get it right before you open the model answer. Dates are written month-day-year, like `\'12-31-2007\'`.',
+    qs: [
+      { q: 'Show the company name and contact name of every supplier in Japan.', a: "SELECT CompanyName, ContactName FROM Suppliers WHERE Country = 'Japan'" },
+      { q: 'Use BETWEEN. Show the product name and unit price of products priced from 10 to 20, cheapest first, then by name.', a: 'SELECT ProductName, UnitPrice FROM Products WHERE UnitPrice BETWEEN 10 AND 20 ORDER BY UnitPrice, ProductName', ordered: true, need: ['BETWEEN'] },
+      { q: 'Show the order ID and order date of every order placed in December 2007.', a: "SELECT OrderID, OrderDate FROM Orders WHERE OrderDate BETWEEN '12-01-2007' AND '12-31-2007'" },
+      { q: 'Use IN. Show the company name and city of customers in Berlin, London or Madrid.', a: "SELECT CompanyName, City FROM Customers WHERE City IN ('Berlin', 'London', 'Madrid')", need: ['IN'] },
+      { q: 'Show the last name of employees whose last name ends with the letter N.', a: "SELECT LastName FROM Employees WHERE LastName LIKE '%n'", need: ['LIKE'] },
+      { q: 'Use NOT IN. Show the product name and category ID of products that are not in category 1, 2 or 3.', a: 'SELECT ProductName, CategoryID FROM Products WHERE CategoryID NOT IN (1, 2, 3)', need: ['NOT IN'] },
+      { q: 'Show the last name, title and city of employees who are **not** Sales Representatives and who live in Seattle or London.', a: "SELECT LastName, Title, City FROM Employees WHERE Title <> 'Sales Representative' AND (City = 'Seattle' OR City = 'London')" },
+      { q: 'Show the product name and unit price of products in category 8, with the headings **Product** and **Price**. Sort by Price, highest first.', a: 'SELECT ProductName AS Product, UnitPrice AS Price FROM Products WHERE CategoryID = 8 ORDER BY Price DESC', ordered: true, headers: true },
+      { q: 'Show the first name, last name and hire date of employees hired in 1993, the most recent hire first, then by last name.', a: "SELECT FirstName, LastName, HireDate FROM Employees WHERE HireDate BETWEEN '01-01-1993' AND '12-31-1993' ORDER BY HireDate DESC, LastName", ordered: true }
     ]
   }
 };
@@ -349,7 +409,9 @@ const L6 = {
         { q: 'What does a SQL function always do?', o: ['Returns a value', 'Deletes a row', 'Creates a table', 'Sorts the rows'], a: 0, why: 'Functions may accept arguments and always return a value.' },
         { q: 'A single-row function returns…', o: ['one result per row', 'one result per table', 'one result per group', 'no result'], a: 0, why: 'It runs the same operation for every row.' },
         { q: 'Which is NOT one of the four kinds of single-row function?', o: ['Network', 'String', 'Number', 'Date'], a: 0, why: 'The four kinds are String, Number, Date and Conversion.' },
-        { q: 'Functions that give one result per group of rows are called…', o: ['multiple-row functions', 'single-row functions', 'aliases', 'literals'], a: 0, why: 'Multiple-row functions work on groups.' }
+        { q: 'Functions that give one result per group of rows are called…', o: ['multiple-row functions', 'single-row functions', 'aliases', 'literals'], a: 0, why: 'Multiple-row functions work on groups.' },
+        { q: 'Show each employee’s `LastName` and the number of letters in it, with the heading **Letters**.', a: 'SELECT LastName, LEN(LastName) AS Letters FROM Employees', headers: true, need: ['LEN'] },
+        { q: 'Show the name of every product in capital letters.', a: 'SELECT UPPER(ProductName) FROM Products', need: ['UPPER'] }
       ]
     },
     {
@@ -373,7 +435,10 @@ const L6 = {
         { q: 'An argument of a function can be…', o: ['a constant, a column name or an expression', 'only a column name', 'only a number', 'only text'], a: 0, why: 'It can be a constant, a variable, a column name or an expression.' },
         { q: 'Which statement about single-row functions is true?', o: ['They can be used in SELECT, WHERE and ORDER BY', 'They can only be used in SELECT', 'They cannot be nested', 'They return one value for the whole table'], a: 0, why: 'They can also be nested.' },
         { q: 'What does `UPPER(\'Fuller\')` return?', o: ['FULLER', 'fuller', 'Fuller', 'F'], a: 0, why: 'UPPER changes every letter to capitals.' },
-        { q: 'A function placed inside another function is…', o: ['nested', 'joined', 'aliased', 'sorted'], a: 0, why: 'For example `UPPER(LEFT(LastName, 3))`.' }
+        { q: 'A function placed inside another function is…', o: ['nested', 'joined', 'aliased', 'sorted'], a: 0, why: 'For example `UPPER(LEFT(LastName, 3))`.' },
+        { q: 'Show each employee’s last name in small letters and first name in capital letters.', a: 'SELECT LOWER(LastName), UPPER(FirstName) FROM Employees', need: ['LOWER', 'UPPER'] },
+        { q: 'Use a function in WHERE. Show the `LastName` of employees whose last name is longer than 7 letters.', a: 'SELECT LastName FROM Employees WHERE LEN(LastName) > 7', need: ['LEN'] },
+        { q: 'Show the first two letters of each first name in capitals, with the heading **Initials**. Nest one function inside another.', a: 'SELECT UPPER(LEFT(FirstName, 2)) AS Initials FROM Employees', headers: true, need: ['UPPER', 'LEFT'] }
       ]
     },
     {
@@ -421,7 +486,10 @@ const L6 = {
         { q: 'What does this return?', code: "SELECT SUBSTRING('Margaret', 2, 5)", o: ['argar', 'Marga', 'rgare', 'Marg'], a: 0, why: 'Start at character 2 (“a”) and take 5 characters: a-r-g-a-r.' },
         { q: 'What does this return?', code: "SELECT LEN('Sales Manager')", o: ['13', '12', '14', '2'], a: 0, why: 'S-a-l-e-s, a space, then M-a-n-a-g-e-r: 13 characters.' },
         { q: 'What does this return?', code: "SELECT CHARINDEX('ale', 'Sales Manager')", o: ['2', '1', '3', '0'], a: 0, why: '“ale” starts at the 2nd character of “Sales”.' },
-        { q: 'What does this return?', code: "SELECT REPLACE('abcdefghicde', 'cde', 'xxx')", o: ['abxxxfghixxx', 'abxxxfghicde', 'xxxabfghixxx', 'abcdefghixxx'], a: 0, why: 'REPLACE changes **all** matches, so both “cde” parts change.' }
+        { q: 'What does this return?', code: "SELECT REPLACE('abcdefghicde', 'cde', 'xxx')", o: ['abxxxfghixxx', 'abxxxfghicde', 'xxxabfghixxx', 'abcdefghixxx'], a: 0, why: 'REPLACE changes **all** matches, so both “cde” parts change.' },
+        { q: 'Use LEFT. Show each supplier’s `CompanyName` and its first 5 characters.', a: 'SELECT CompanyName, LEFT(CompanyName, 5) FROM Suppliers', need: ['LEFT'] },
+        { q: 'Show each different job title with the word “Sales” replaced by “Selling”.', a: "SELECT DISTINCT REPLACE(Title, 'Sales', 'Selling') FROM Employees", need: ['REPLACE', 'DISTINCT'] },
+        { q: 'Show each `LastName` and the position of the first letter “a” in it.', a: "SELECT LastName, CHARINDEX('a', LastName) FROM Employees", need: ['CHARINDEX'], why: 'A name with no “a” gives 0.' }
       ]
     },
     {
@@ -438,7 +506,10 @@ const L6 = {
         { q: 'What does `POWER(3, 4)` return?', o: ['81', '12', '7', '64'], a: 0, why: '3 × 3 × 3 × 3 = 81.' },
         { q: 'What does `CEILING(-123.45)` return?', o: ['-123', '-124', '-123.5', '124'], a: 0, why: 'CEILING goes up toward the larger number. The next whole number above -123.45 is -123.' },
         { q: 'What does `FLOOR(-123.45)` return?', o: ['-124', '-123', '-123.4', '123'], a: 0, why: 'FLOOR goes down. The next whole number below -123.45 is -124.' },
-        { q: 'What does `ROUND(748.58, -2)` return?', o: ['700', '750', '748', '800'], a: 0, why: 'A length of -2 rounds to the nearest hundred.' }
+        { q: 'What does `ROUND(748.58, -2)` return?', o: ['700', '750', '748', '800'], a: 0, why: 'A length of -2 rounds to the nearest hundred.' },
+        { q: 'Show `ProductName` and `UnitPrice` rounded to a whole number, with the heading **Rounded**.', a: 'SELECT ProductName, ROUND(UnitPrice, 0) AS Rounded FROM Products', headers: true, need: ['ROUND'] },
+        { q: 'For products in category 2, show `ProductName`, `UnitPrice`, and the price rounded up to the next whole number with the heading **Up**.', a: 'SELECT ProductName, UnitPrice, CEILING(UnitPrice) AS Up FROM Products WHERE CategoryID = 2', headers: true, need: ['CEILING'] },
+        { q: 'Use POWER. Show 5 raised to the power of 3.', a: 'SELECT POWER(5, 3)', need: ['POWER'] }
       ]
     },
     {
@@ -475,7 +546,10 @@ const L6 = {
         { q: 'What does this return?', code: "SELECT DATEADD(dd, 3, '1992-05-01')", o: ['1992-05-04', '1992-08-01', '1992-05-03', '1995-05-01'], a: 0, why: 'dd means days. Add 3 days to May 1.' },
         { q: 'Which function returns the month **name**, such as May?', o: ['DATENAME', 'DATEPART', 'DATEDIFF', 'DATEADD'], a: 0, why: 'DATENAME returns text. DATEPART returns a number.' },
         { q: 'Which function returns a part of a date as a **number**?', o: ['DATEPART', 'DATENAME', 'GETDATE', 'CONVERT'], a: 0, why: 'For example `DATEPART(mm, date)` gives 5 for May.' },
-        { q: 'What does this return?', code: "SELECT DATEDIFF(yy, '1992-12-31', '1993-01-01')", o: ['1', '0', '2', '365'], a: 0, why: 'DATEDIFF counts boundaries crossed. One day apart, but the year boundary (January 1) is crossed once.' }
+        { q: 'What does this return?', code: "SELECT DATEDIFF(yy, '1992-12-31', '1993-01-01')", o: ['1', '0', '2', '365'], a: 0, why: 'DATEDIFF counts boundaries crossed. One day apart, but the year boundary (January 1) is crossed once.' },
+        { q: 'Show `LastName`, `HireDate`, and the date one year after hire with the heading **Anniversary**.', a: 'SELECT LastName, HireDate, DATEADD(yy, 1, HireDate) AS Anniversary FROM Employees', headers: true, need: ['DATEADD'] },
+        { q: 'Show `LastName` and the year each employee was hired, as a number, with the heading **Hire Year**.', a: "SELECT LastName, YEAR(HireDate) AS 'Hire Year' FROM Employees", headers: true, why: '`DATEPART(yyyy, HireDate)` works too.' },
+        { q: 'Use DATENAME. Show `LastName` and the name of the month each employee was born in, with the heading **Birth Month**.', a: "SELECT LastName, DATENAME(mm, BirthDate) AS 'Birth Month' FROM Employees", headers: true, need: ['DATENAME'] }
       ]
     },
     {
@@ -503,7 +577,10 @@ const L6 = {
         { q: 'Which converts `UnitPrice` to text?', o: ['CAST(UnitPrice AS VARCHAR(20))', 'CAST(VARCHAR(20), UnitPrice)', 'UnitPrice AS CAST', 'TEXT(UnitPrice)'], a: 0, why: 'CAST takes the value, then AS, then the data type.' },
         { q: 'In `CONVERT(varchar(20), birthdate, 1)`, what is the `1`?', o: ['The style number for the date format', 'The length', 'A row number', 'A column number'], a: 0, why: 'The style decides how the date is written. Style 1 is mm/dd/yy.' },
         { q: 'CAST and CONVERT both…', o: ['convert a value to another data type', 'sort the rows', 'remove duplicate rows', 'join two tables'], a: 0, why: 'They convert data types explicitly.' },
-        { q: 'What does this return?', code: "SELECT CONVERT(varchar(20), '1948-12-08', 3)", o: ['08/12/48', '12/08/48', '48/12/08', '1948-12-08'], a: 0, why: 'Style 3 is dd/mm/yy.' }
+        { q: 'What does this return?', code: "SELECT CONVERT(varchar(20), '1948-12-08', 3)", o: ['08/12/48', '12/08/48', '48/12/08', '1948-12-08'], a: 0, why: 'Style 3 is dd/mm/yy.' },
+        { q: 'For products in category 1, show one column named **Info** with text like “Chai costs 18.00”.', a: "SELECT ProductName + ' costs ' + CAST(UnitPrice AS VARCHAR(20)) AS Info FROM Products WHERE CategoryID = 1", headers: true, why: 'UnitPrice is money, so it must be converted to text before `+` can join it.' },
+        { q: 'Use CONVERT with a style. Show `LastName` and the birth date as dd/mm/yy, with the heading **Born**.', a: 'SELECT LastName, CONVERT(varchar(20), BirthDate, 3) AS Born FROM Employees', headers: true, need: ['CONVERT'] },
+        { q: 'Show one column named **Emp** with the employee ID, a colon and a space, then the last name (like “1: Davolio”).', a: "SELECT CAST(EmployeeID AS VARCHAR(10)) + ': ' + LastName AS Emp FROM Employees", headers: true, why: 'EmployeeID is a number. Convert it to text first.' }
       ]
     }
   ],
@@ -523,7 +600,24 @@ const L6 = {
       { q: 'To show a date as text like 12/08/48, use…', o: ['CONVERT with a style number', 'ROUND', 'REPLICATE', 'DATEDIFF'], a: 0, why: 'Style 1 gives mm/dd/yy.' },
       { q: 'What does this return?', code: 'SELECT ROUND(123.4545, 2)', o: ['123.45', '123.46', '123', '123.5'], a: 0, why: 'Length 2 keeps two decimals.' },
       { q: 'Which clauses can contain a function?', o: ['SELECT, WHERE and ORDER BY', 'Only SELECT', 'Only WHERE', 'None of them'], a: 0, why: 'Single-row functions can be used in all three.' },
-      { q: 'What does this return?', code: "SELECT DATEPART(mm, '1992-05-01')", o: ['5', 'May', '1992', '1'], a: 0, why: 'DATEPART gives a number. DATENAME would give “May”.' }
+      { q: 'What does this return?', code: "SELECT DATEPART(mm, '1992-05-01')", o: ['5', 'May', '1992', '1'], a: 0, why: 'DATEPART gives a number. DATENAME would give “May”.' },
+      { q: 'Use DATEDIFF. Show `LastName` and the number of year boundaries between the birth date and the hire date, with the heading **Age At Hire**.', a: "SELECT LastName, DATEDIFF(yy, BirthDate, HireDate) AS 'Age At Hire' FROM Employees", headers: true, need: ['DATEDIFF'] },
+      { q: 'Show the `ProductName` and `UnitPrice` of products whose name is longer than 25 characters.', a: 'SELECT ProductName, UnitPrice FROM Products WHERE LEN(ProductName) > 25', need: ['LEN'] },
+      { q: 'Show one column named **Name**: the last name in capitals, a comma and a space, then the first name (like “DAVOLIO, Nancy”). Sort by last name.', a: "SELECT UPPER(LastName) + ', ' + FirstName AS Name FROM Employees ORDER BY LastName", headers: true, ordered: true, need: ['UPPER'] }
+    ]
+  },
+  exam: {
+    intro: 'Every question here asks you to type the full query, as in the final exam. Run it as often as you like, then press Check answer. A question scores only if you get it right before you open the model answer.',
+    qs: [
+      { q: 'Use RIGHT. Show each `LastName` and its last three letters, with the heading **Ending**.', a: 'SELECT LastName, RIGHT(LastName, 3) AS Ending FROM Employees', headers: true, need: ['RIGHT'] },
+      { q: 'Show the company name of every supplier and the number of characters in it, but only where it is longer than 25 characters.', a: 'SELECT CompanyName, LEN(CompanyName) FROM Suppliers WHERE LEN(CompanyName) > 25', need: ['LEN'] },
+      { q: 'Show `ProductName`, `UnitPrice`, and the price rounded to the nearest ten with the heading **Nearest Ten**.', a: "SELECT ProductName, UnitPrice, ROUND(UnitPrice, -1) AS 'Nearest Ten' FROM Products", headers: true, need: ['ROUND'] },
+      { q: 'For products in category 4, show `ProductName` and the price rounded down to a whole number, with the heading **Whole Dollars**.', a: "SELECT ProductName, FLOOR(UnitPrice) AS 'Whole Dollars' FROM Products WHERE CategoryID = 4", headers: true, need: ['FLOOR'] },
+      { q: "For the orders of customer `'ALFKI'`, show the order ID, the order date, and the date 7 days later with the heading **Due Date**.", a: "SELECT OrderID, OrderDate, DATEADD(dd, 7, OrderDate) AS 'Due Date' FROM Orders WHERE CustomerID = 'ALFKI'", headers: true, need: ['DATEADD'] },
+      { q: 'Show `LastName`, `HireDate`, and the number of month boundaries from the hire date to January 1, 2000, with the heading **Months**.', a: "SELECT LastName, HireDate, DATEDIFF(mm, HireDate, '01-01-2000') AS Months FROM Employees", headers: true, need: ['DATEDIFF'] },
+      { q: 'For products that cost more than 50, show one column named **Products Price** with text like “Mishi Kobe Niku costs $97.00”.', a: "SELECT ProductName + ' costs $' + CAST(UnitPrice AS VARCHAR(20)) AS 'Products Price' FROM Products WHERE UnitPrice > 50", headers: true },
+      { q: 'Use CONVERT. Show `LastName` and the hire date as mm/dd/yy with the heading **Hired**. Sort by hire date, then by last name.', a: 'SELECT LastName, CONVERT(varchar(20), HireDate, 1) AS Hired FROM Employees ORDER BY HireDate, LastName', headers: true, ordered: true, need: ['CONVERT'] },
+      { q: 'Show one column named **Name** (first name, a space, last name) and the month name of the birth date named **Month**, for employees born in months 1 to 6.', a: "SELECT FirstName + ' ' + LastName AS Name, DATENAME(mm, BirthDate) AS Month FROM Employees WHERE MONTH(BirthDate) <= 6", headers: true }
     ]
   }
 };
