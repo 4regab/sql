@@ -32,21 +32,30 @@ const store = {
 };
 
 /* ---------- menu ---------- */
+const openL = new Set(); // lessons whose menu group is open; the current page's lesson opens on its own
 function drawNav() {
   const cur = location.hash || '#/';
+  const curU = UNITS.find(u => u.href === cur);
+  if (curU) openL.add(curU.L.id);
   const done = UNITS.filter(passed).length;
   $('#prog').textContent = `${done}/${UNITS.length} done`;
   $('#prog').setAttribute('aria-label', `${done} of ${UNITS.length} parts complete`);
   navEl.innerHTML = `<a class="nav-home" href="#/"${cur === '#/' ? ' aria-current="page"' : ''}>Home</a>` + LESSONS.map(L => {
     const us = UNITS.filter(u => u.L === L);
-    return `<div class="nav-l"><h2>Lesson ${L.n}<small>${esc(L.title)}</small></h2><ol>${us.map(u => {
+    return `<details class="nav-l" data-l="${L.id}"${openL.has(L.id) ? ' open' : ''}><summary><h2>Lesson ${L.n}<small>${esc(L.title)}</small></h2></summary><ol>${us.map(u => {
       const st = passed(u) ? [ic('ok'), 'done', 'complete'] : P.visited[u.id] ? [ic('dot'), 'seen', 'started'] : [ic('ring'), '', 'not started'];
       return `<li><a href="${u.href}" ${cur === u.href ? 'aria-current="page"' : ''}><span class="st ${st[1]}" role="img" aria-label="${st[2]}">${st[0]}</span><span>${u.kind === 's' ? `${u.i + 1}. ` : ''}${esc(u.title)}</span></a></li>`;
-    }).join('')}</ol></div>`;
+    }).join('')}</ol></details>`;
   }).join('');
 }
-const setNav = open => { document.body.classList.toggle('nav-open', open); $('#menu').setAttribute('aria-expanded', String(open)); };
-$('#menu').onclick = () => setNav(!document.body.classList.contains('nav-open'));
+const setNav = open => { document.body.classList.toggle('nav-open', open); if (!wide.matches) $('#menu').setAttribute('aria-expanded', String(open)); };
+// Wide screens: the menu button hides or shows the sidebar, and the choice is remembered.
+const wide = matchMedia('(min-width:1024px)');
+const setSide = hide => { document.body.classList.toggle('side-hidden', hide); $('#menu').setAttribute('aria-expanded', String(!hide)); try { localStorage.setItem('sqlsite.side', hide ? 'hidden' : ''); } catch { /* private mode */ } };
+try { if (localStorage.getItem('sqlsite.side') === 'hidden') document.body.classList.add('side-hidden'); } catch { /* private mode */ }
+if (wide.matches) $('#menu').setAttribute('aria-expanded', String(!document.body.classList.contains('side-hidden')));
+$('#menu').onclick = () => wide.matches ? setSide(!document.body.classList.contains('side-hidden')) : setNav(!document.body.classList.contains('nav-open'));
+navEl.addEventListener('toggle', e => { const d = e.target; if (d.dataset.l) d.open ? openL.add(d.dataset.l) : openL.delete(d.dataset.l); }, true);
 $('#scrim').onclick = () => setNav(false);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') setNav(false); });
 navEl.addEventListener('click', e => { if (e.target.closest('a')) setNav(false); });
