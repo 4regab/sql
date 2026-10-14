@@ -98,8 +98,8 @@ function home() {
   const total = UNITS.length, done = UNITS.filter(passed).length;
   const first = UNITS.find(u => !passed(u)) || UNITS[0];
   app.innerHTML = `<article class="page home">
-    <header class="hero"><p class="eyebrow">Database Administration · Lessons 1 to 6</p><h1>Learn SQL by watching it run</h1>
-      <p class="lede">Six short lessons. Lessons 1 to 3 cover database administration, SQL, tables and constraints. Lessons 4 to 6 cover the SQL SELECT statement. Every query example runs on a real database in your browser, one step at a time, so you can see what each part of a query does. Then you practise and take a quiz.</p>
+    <header class="hero"><p class="eyebrow">Database Administration · Lessons 2 to 6</p><h1>Learn SQL by watching it run</h1>
+      <p class="lede">Five short lessons. Lessons 2 and 3 cover SQL basics, tables and constraints. Lessons 4 to 6 cover the SQL SELECT statement. Every query example runs on a real database in your browser, one step at a time, so you can see what each part of a query does. Then you practise and take a quiz.</p>
       <p><a class="btn pri big" href="${first.href}">${done ? 'Continue learning' : `Start Lesson ${LESSONS[0].n}`}</a></p>
       <p class="mini">${done} of ${total} parts complete. Your progress is saved on this device.</p></header>
     <ul class="how"><li><b>Watch</b><span>Step through a query clause by clause.</span></li><li><b>Play</b><span>Change an input and see the result move.</span></li><li><b>Try</b><span>Write real queries and get them checked.</span></li><li><b>Quiz</b><span>Answer a short quiz for every section and lesson.</span></li></ul>

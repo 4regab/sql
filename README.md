@@ -1,8 +1,7 @@
 # Learn SQL by watching it run
 
-Interactive lessons for the PUP *Database Administration* handout, Lessons 1 to 6:
+Interactive lessons for the PUP *Database Administration* handout, Lessons 2 to 6:
 
-- **Lesson 1:** Introduction to database administration (DA and DBA roles, database security, data availability, data quality)
 - **Lesson 2:** Introduction to SQL (DDL, DML, DCL, managing databases, data types, keys, CREATE and ALTER TABLE)
 - **Lesson 3:** Constraints (data integrity, PRIMARY KEY, FOREIGN KEY, UNIQUE, DEFAULT, CHECK)
 - **Lesson 4:** Basic SQL on single tables (SELECT, arithmetic, NULL, aliases, concatenation, DISTINCT)
@@ -16,7 +15,7 @@ Interactive lessons for the PUP *Database Administration* handout, Lessons 1 to 
 - **Watch it run.** Any query can be played one clause at a time: FROM, WHERE, SELECT, DISTINCT, ORDER BY, result. Rows tick off, columns appear, rows slide into order.
 - **Play with it.** Small labs: selection/projection/join, LIKE patterns, AND/OR/NOT and precedence, BETWEEN, IN, string tiles, number line, date parts and boundaries, CONVERT styles.
 - **Try it yourself.** A SQL box that runs on a real database in the browser. Handout exercises are checked by running a model answer and comparing results.
-- **Quizzes.** A short quiz for each of the 29 sections, a review for each lesson, and an exam practice page for Lessons 4 to 6. Each typed question lists the columns of the tables it uses. Scores are saved in the browser.
+- **Quizzes.** A short quiz for each of the 23 sections, a review for each lesson, and an exam practice page for Lessons 4 to 6. Each typed question lists the columns of the tables it uses. Scores are saved in the browser.
 
 ## How it works
 
