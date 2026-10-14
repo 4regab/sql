@@ -11,7 +11,7 @@
 html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(var(--top) + 1rem)}
 body{margin:0;background:#fff;color:var(--ink);font:400 1rem/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-wrap:break-word}
 body.nav-open{overflow:hidden}
-img,svg{max-width:100%}
+img,svg{max-width:100%;height:auto}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;touch-action:manipulation}
 code,.mono{font-family:var(--mono)}
@@ -138,6 +138,11 @@ details.tbl summary{min-height:2.75rem;display:flex;align-items:center;gap:.5rem
 .try .ed{display:block;width:100%;min-height:5.5rem;padding:.75rem;border:1px solid #334155;border-radius:.6rem;background:var(--code-bg);color:var(--code-ink);font:500 1rem/1.55 var(--mono);resize:vertical;tab-size:4}
 .try .bar{display:flex;flex-wrap:wrap;gap:.5rem;margin:.6rem 0}
 .try .task{margin-top:0}
+.try .ctx{margin:0 0 .6rem;font-size:.9rem;line-height:1.9}
+.try .ctx code{white-space:nowrap}
+.pic{margin:1rem 0;text-align:center}
+.pic img{border:1px solid var(--line);border-radius:.5rem}
+.guide li{margin:.4rem 0}
 .fbk:empty{display:none}
 .fbk{margin:.5rem 0;padding:.6rem .9rem;border-radius:.6rem;background:var(--soft)}.fbk p{margin:.25rem 0}
 .fbk.ok{background:var(--ok-soft);border-left:4px solid var(--ok)}.fbk.no{background:var(--bad-soft);border-left:4px solid var(--bad)}

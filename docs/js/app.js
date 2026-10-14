@@ -15,7 +15,7 @@ const UNITS = [];
 LESSONS.forEach(L => {
   L.sections.forEach((s, i) => UNITS.push({ id: s.id, kind: 's', L, s, i, href: `#/s/${s.id}`, title: s.title, qs: s.quiz }));
   UNITS.push({ id: 'r-' + L.id, kind: 'r', L, href: `#/r/${L.id}`, title: 'Lesson review', qs: L.review.quiz });
-  UNITS.push({ id: 'x-' + L.id, kind: 'x', L, href: `#/x/${L.id}`, title: 'Exam practice', qs: L.exam.qs });
+  if (L.exam) UNITS.push({ id: 'x-' + L.id, kind: 'x', L, href: `#/x/${L.id}`, title: 'Exam practice', qs: L.exam.qs });
 });
 const KEY = 'sqlsite.v1';
 const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
@@ -89,9 +89,9 @@ function home() {
   const total = UNITS.length, done = UNITS.filter(passed).length;
   const first = UNITS.find(u => !passed(u)) || UNITS[0];
   app.innerHTML = `<article class="page home">
-    <header class="hero"><p class="eyebrow">Database Administration · Lessons 4 to 6</p><h1>Learn SQL by watching it run</h1>
-      <p class="lede">Three short lessons on the SQL SELECT statement. Every example runs on a real database in your browser, one step at a time, so you can see what each part of a query does. Then you practise and take a quiz.</p>
-      <p><a class="btn pri big" href="${first.href}">${done ? 'Continue learning' : 'Start Lesson 4'}</a></p>
+    <header class="hero"><p class="eyebrow">Database Administration · Lessons 1 to 6</p><h1>Learn SQL by watching it run</h1>
+      <p class="lede">Six short lessons. Lessons 1 to 3 cover database administration, SQL, tables and constraints. Lessons 4 to 6 cover the SQL SELECT statement. Every query example runs on a real database in your browser, one step at a time, so you can see what each part of a query does. Then you practise and take a quiz.</p>
+      <p><a class="btn pri big" href="${first.href}">${done ? 'Continue learning' : `Start Lesson ${LESSONS[0].n}`}</a></p>
       <p class="mini">${done} of ${total} parts complete. Your progress is saved on this device.</p></header>
     <ul class="how"><li><b>Watch</b><span>Step through a query clause by clause.</span></li><li><b>Play</b><span>Change an input and see the result move.</span></li><li><b>Try</b><span>Write real queries and get them checked.</span></li><li><b>Quiz</b><span>Answer a short quiz for every section and lesson.</span></li></ul>
     <div class="cards">${LESSONS.map(L => {
@@ -117,9 +117,11 @@ function review(lid) {
   const u = UNITS[i], { L } = u, R = L.review;
   document.title = `Lesson ${L.n} review`;
   P.visited[u.id] = 1; save(); drawNav();
-  const solved = R.tasks.filter((_, k) => P.tasks[`${L.id}-t${k}`]).length;
+  const tasks = R.tasks || [], solved = tasks.filter((_, k) => P.tasks[`${L.id}-t${k}`]).length;
   app.innerHTML = `<article class="page"><p class="crumb">Lesson ${L.n} · Review</p><h1>Lesson ${L.n} review</h1><p class="lede">${rich(R.intro)}</p><div class="body"></div></article>`;
   const art = app.querySelector('.page'), body = art.querySelector('.body');
+  if (R.guide) body.insertAdjacentHTML('beforeend', `<section><h2>Guide questions</h2><ol class="guide">${R.guide.map(g => `<li>${rich(g)}</li>`).join('')}</ol></section>`);
+  if (!tasks.length) { quizBlock(art, u); art.insertAdjacentHTML('beforeend', pager(i)); return; }
   const ex = document.createElement('section');
   ex.innerHTML = `<h2>Exercises <span class="mini" id="solved">${solved} of ${R.tasks.length} solved</span></h2>${R.note ? `<p>${rich(R.note)}</p>` : ''}`;
   body.append(ex);

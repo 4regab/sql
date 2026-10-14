@@ -1,7 +1,560 @@
-/* content.js: the three lessons. Source: PUP "Database Administration" handout, Lessons 4 to 6.
+/* content.js: the six lessons. Source: PUP "Database Administration" handout, Lessons 1 to 6.
    Text style: **bold** and `code` only. Block types: h, p, list, note, code, table, html, demo, lab, try, tables. */
 
 const T = (a, b) => ['table', a, { rows: b }];
+const IMG = (src, alt, w, h, cap) => ['html', `<figure class="pic"><img src="img/${src}" alt="${alt}" width="${w}" height="${h}" loading="lazy"><figcaption>${cap}</figcaption></figure>`];
+const RO = ['note', 'The practice database on this site is read-only. Statements that create or change things are shown here to read and copy into SQL Server. They do not run on this page.', { label: 'Read, don’t run' }];
+
+/* ====================================================================== LESSON 1 */
+const L1 = {
+  id: 'l1', n: 1, title: 'Introduction to Database Administration',
+  blurb: 'What data administrators and database administrators do, and how they keep data secure, available and of good quality.',
+  outcomes: ['Define the importance of the database and data administration', 'Define the tasks and roles of data and database administrators', 'Understand the data security, data availability and data quality'],
+  sections: [
+    {
+      id: 'l1s1', title: 'Data administration and database administration',
+      sub: 'This lesson will emphasize the importance of managing data. The data administration and database administration roles are changing in today’s business environment, with pressure being exerted to maintain data quality while building high-performing systems quickly.',
+      blocks: [
+        ['p', 'The **Data Administrator (DA)** and **Database Administrator (DBA)** are responsible for managing and controlling the activities associated with the corporate data and the corporate database, respectively. The DA is more concerned with the early stages of the lifecycle, from planning through to logical database design. In contrast, the DBA is more concerned with the later stages, from application/physical database design to operational maintenance.'],
+        ['h', 'Data administration'],
+        ['p', 'A high-level function that is responsible for the overall management of data resources in an organization, including maintaining corporate-wide definitions and standards.'],
+        ['p', 'The management of the data resource, which includes database planning, development, and maintenance of standards, policies and procedures, and conceptual and logical database design.'],
+        ['p', 'The Data Administrator (DA) is responsible for the corporate data resource, which includes non-computerized data, and in practice is often concerned with managing the shared data of users or application areas of an organization. The DA has the primary responsibility of consulting with and advising senior managers and ensuring that the application of database technologies continues to support corporate objectives. In some enterprises, data administration is a distinct functional area, in others it may be combined with database administration.'],
+        ['h', 'Data administration tasks'],
+        ['list', ['Selecting appropriate productivity tools.', 'Assisting in the development of the corporate IT/IS and enterprise strategies.', 'Undertaking feasibility studies and planning for database development.', 'Developing a corporate data model.', 'Determining the organization’s data requirements.', 'Setting data collection standards and establishing data formats.', 'Estimating volumes of data and likely growth.', 'Determining patterns and frequencies of data usage.', 'Determining data access requirements and safeguards for both legal and enterprise requirements.', 'Undertaking conceptual and logical database design.', 'Liaising with database administration staff and application developers to ensure applications meet all stated requirements.', 'Educating users on data standards and legal responsibilities.', 'Keeping up to date with IT/IS and enterprise developments.', 'Ensuring documentation is up to date and complete, including standards, policies, procedures, use of the data dictionary, and controls on end-users.', 'Managing the data dictionary.', 'Liaising with users to determine new requirements and to resolve difficulties over data access or performance.', 'Developing a security policy.']],
+        ['h', 'Database administration'],
+        ['p', 'A technical function that is responsible for physical database design and for dealing with technical issues such as security enforcement, database performance, and backup and recovery.'],
+        ['p', 'The management of the physical realization of a database system, which includes physical database design and implementation, setting security and integrity controls, monitoring system performance, and reorganizing the database, as necessary.'],
+        ['p', 'The database administration staff are more technically oriented than the data administration staff, requiring knowledge of specific DBMSs and the operating system environment. Although the primary responsibilities are centered on developing and maintaining systems using the DBMS software to its fullest extent, DBA staff also assist DA staff in other areas.'],
+        ['h', 'Database administration tasks'],
+        ['list', ['Evaluating and selecting DBMS products.', 'Undertaking physical database design.', 'Implementing a physical database design using a target DBMS.', 'Defining security and integrity constraints.', 'Liaising with database application developers.', 'Developing test strategies.', 'Training users.', 'Responsible for ‘signing off’ the implemented database system.', 'Monitoring system performance and tuning the database, as appropriate.', 'Performing backups routinely.', 'Ensuring recovery mechanisms and procedures are in place.', 'Ensuring documentation is complete including in-house produced material.', 'Keeping up to date with software and hardware developments and costs, and installing updates as necessary.']],
+        T(['', 'Data Administrator (DA)', 'Database Administrator (DBA)'], [['Kind of function', 'high-level, managerial', 'technical'], ['Stages of the lifecycle', 'early: planning to logical database design', 'later: application/physical design to operational maintenance'], ['Typical work', 'standards, policies, corporate data model, conceptual and logical design', 'physical design, security enforcement, performance, backup and recovery']])
+      ],
+      quiz: [
+        { q: 'Who is more concerned with the **early** stages of the database lifecycle, from planning through to logical database design?', o: ['The Data Administrator (DA)', 'The Database Administrator (DBA)', 'The application developer', 'The end-user'], a: 0, why: 'The DA handles planning to logical design. The DBA handles the later stages.' },
+        { q: 'Which is a **technical** function responsible for physical database design, security enforcement, performance, and backup and recovery?', o: ['Database administration', 'Data administration', 'Data warehousing', 'Internal marketing'], a: 0, why: 'That is how the handout defines database administration.' },
+        { q: '“Developing a corporate data model” is a task of…', o: ['data administration', 'database administration'], a: 0, why: 'It is on the list of data administration tasks.' },
+        { q: '“Performing backups routinely” is a task of…', o: ['database administration', 'data administration'], a: 0, why: 'It is on the list of database administration tasks.' },
+        { q: 'The corporate data resource that the DA is responsible for includes non-computerized data.', o: ['True', 'False'], a: 0, why: 'The handout says it includes non-computerized data.' },
+        { q: 'Which staff need knowledge of specific DBMSs and the operating system environment?', o: ['Database administration staff', 'Data administration staff', 'Senior managers', 'Users'], a: 0, why: 'DBA staff are more technically oriented than DA staff.' }
+      ]
+    },
+    {
+      id: 'l1s2', title: 'Roles of traditional data and database administration',
+      sub: 'The handout lists five roles for traditional data administration and six for traditional database administration.',
+      blocks: [
+        ['h', 'Roles of traditional data administration'],
+        ['p', '**Data policies, procedures, standards.** Data policies are statements that make explicit the goals of data administration, such as “Every user must have a valid password.” Data procedures are written outlines of actions to be taken to perform a certain activity. Backup and recovery procedures, for example, should be communicated to all involved employees. Data standards are explicit conventions and behaviors that are to be followed and that can be used to help evaluate database quality.'],
+        ['p', '**Planning.** Effective administration requires both an understanding of the needs of the organization for data and information and the ability to lead the development of an information architecture that will meet the diverse needs of the typical organization.'],
+        ['p', '**Data conflict (ownership) resolution.** Ownership of data is a ticklish issue at least occasionally in every organization. Those in data administration are well placed to resolve data ownership issues because they are not typically associated with a certain department. Establishing procedures for resolving such conflicts is essential.'],
+        ['p', '**Managing the information repository.** An information repository serves as an essential source of information and functionality for each of the following:'],
+        ['list', ['Users who must understand data definitions, business rules, and relationships among data objects', 'Automated data modeling and design tools that are used to specify and develop information systems', 'Applications that access and manipulate data (or business information) in the corporate databases', 'Database management systems, which maintain the repository and update system privileges, passwords, object definitions, and so on']],
+        ['p', '**Internal marketing of DA concepts.** The importance of following established procedures and policies must be proactively instituted through data (and database) administrators. Effective internal marketing may reduce resistance to change and data ownership problems.'],
+        ['h', 'Roles of traditional database administration'],
+        ['p', '**Selection of DBMS and software tools.** The database administration group must establish policies regarding the DBMS and related system software (e.g., compilers, system monitors) that will be supported within the organization. This requires evaluating vendors and their software products, performing benchmarks, and so on.'],
+        ['p', '**Installing/upgrading DBMS.** A DBMS installation can be a complex process of making sure all the correct versions of different modules are in place, all the proper device drivers are present, and the DBMS works correctly with any third-party software products. DBMS vendors periodically update package modules; planning for, testing, and installing upgrades to ensure that existing applications still work properly can be time-consuming and intricate.'],
+        ['p', '**Tuning database performance.** The performance of a database (query and update processing time as well as data storage utilization) needs to be constantly monitored. The design of a database must be frequently changed to meet new requirements and to overcome the degrading effects of many content updates.'],
+        ['p', '**Improving query processing performance.** Indexes may need to be added or deleted to balance performance across all queries. Data may need to be relocated to different devices to allow better concurrent processing of queries and updates. The vast majority of a DBA’s time is likely to be spent on tuning database performance and improving database query processing time.'],
+        ['p', '**Managing data security, privacy, and integrity.** Protecting the security, privacy, and integrity of organizational databases rests with the database administration function.'],
+        ['p', '**Data backup and recovery.** A DBA must ensure that backup procedures are established that will allow for the recovery of all necessary data should a loss occur through application failure, hardware failure, physical or electrical disaster, or human error or malfeasance.']
+      ],
+      quiz: [
+        { q: '“Every user must have a valid password.” This is an example of a data…', o: ['policy', 'procedure', 'standard', 'repository'], a: 0, why: 'Data policies make the goals of data administration explicit.' },
+        { q: 'Written outlines of actions to be taken to perform a certain activity are data…', o: ['procedures', 'policies', 'standards', 'models'], a: 0, why: 'Backup and recovery procedures are the handout’s example.' },
+        { q: 'Why are those in data administration well placed to resolve data ownership issues?', o: ['They are not typically associated with a certain department', 'They own all the data', 'They write all the applications', 'They install the DBMS'], a: 0, why: 'Being outside any one department lets them act fairly.' },
+        { q: 'On what is the vast majority of a DBA’s time likely to be spent?', o: ['Tuning database performance and improving query processing time', 'Internal marketing', 'Selecting productivity tools', 'Resolving data ownership'], a: 0, why: 'The handout says this directly under “Improving query processing performance”.' },
+        { q: 'Which role is about evaluating vendors and their software products and performing benchmarks?', o: ['Selection of DBMS and software tools', 'Installing/upgrading DBMS', 'Planning', 'Data backup and recovery'], a: 0, why: 'Choosing which DBMS and tools to support needs vendor evaluation and benchmarks.' },
+        { q: 'Effective internal marketing of DA concepts may reduce…', o: ['resistance to change and data ownership problems', 'query processing time', 'the size of the database', 'the number of indexes'], a: 0, why: 'That is the stated benefit.' }
+      ]
+    },
+    {
+      id: 'l1s3', title: 'Evolving approaches to data administration',
+      sub: 'The DA and DBA roles keep changing. The handout lists five newer approaches.',
+      blocks: [
+        ['p', '**Blend data and database administration into one role.** Many organizations have blended together the data administration and database administration roles. These organizations emphasize the capability to build a database quickly, tune it for maximum performance, and restore it to production quickly when problems develop. These databases are more likely to be departmental, client/server databases that are developed quickly using newer development approaches, such as prototyping, which allow changes to be made more quickly. The blending of data administration and database administration roles also means that DBAs in such organizations must be able to create and enforce data standards and policies.'],
+        ['p', '**Procedural DBAs–managing quality of triggers and stored procedures.** DBA must address the issues of quality, maintainability, performance, and availability of database objects such as triggers, stored procedures, and persistent stored modules. A DBA is now responsible for ensuring that all such procedural database logic is effectively planned, tested, implemented, shared, and reused (Mullins, 2002). A person filling such a role will typically need to come from the ranks of application programming and be capable of working closely with that group.'],
+        ['p', '**eDBA–managing Internet-enabled database applications.** A DBA in such an online environment needs to have a full range of DBA skills and also be capable of managing applications and databases that are Internet enabled. Major priorities in this environment include high data availability (24/7), integration of legacy data with Web-based applications, tracking of Web activity, and performance engineering for the Internet.'],
+        ['p', '**PDA DBA–data synchronization and personal database management.** Most DBMS vendors offer small-footprint versions of their products to run on these smartphones, typically in support of specific applications. A small amount of critical data is typically stored on a smartphone, which then is periodically synchronized with data stored on the enterprise data servers.'],
+        ['p', '**Data warehouse administration.** A DWA plays many of the same roles as do DAs and DBAs for the data warehouse and data mart databases for the purpose of supporting decision-making applications. They emphasize integration and coordination of metadata and data.']
+      ],
+      quiz: [
+        { q: 'In organizations that blend the DA and DBA roles, DBAs must also be able to…', o: ['create and enforce data standards and policies', 'avoid prototyping', 'work only on mainframes', 'stop tuning the database'], a: 0, why: 'Blending the roles moves DA work onto the DBA.' },
+        { q: 'A procedural DBA manages the quality of…', o: ['triggers and stored procedures', 'smartphone data', 'Web activity logs', 'the data warehouse'], a: 0, why: 'Procedural DBAs look after procedural database logic.' },
+        { q: 'High data availability (24/7) and tracking of Web activity are major priorities for the…', o: ['eDBA', 'PDA DBA', 'procedural DBA', 'DWA'], a: 0, why: 'The eDBA manages Internet-enabled database applications.' },
+        { q: 'Which role periodically synchronizes a small amount of critical data on smartphones with the enterprise data servers?', o: ['PDA DBA', 'eDBA', 'DWA', 'Procedural DBA'], a: 0, why: 'PDA DBA covers data synchronization and personal database management.' },
+        { q: 'A DWA emphasizes integration and coordination of metadata and data for decision-making applications.', o: ['True', 'False'], a: 0, why: 'That is data warehouse administration.' }
+      ]
+    },
+    {
+      id: 'l1s4', title: 'Database security',
+      sub: 'The goal of database security is to protect data from accidental or intentional threats to their integrity and access.',
+      blocks: [
+        ['p', 'The database environment has grown more complex, with distributed databases located on client/server architectures and personal computers as well as on mainframes. Access to data has become more open through the Internet and corporate intranets and from mobile computing devices. As a result, managing data security effectively has become more difficult and time-consuming.'],
+        ['p', 'Data administration is often responsible for developing overall policies and procedures to protect databases. Database administration is typically responsible for administering database security on a daily basis. The facilities that database administrators have to use in establishing adequate data security are discussed later, but first it is important to review potential threats to data security.'],
+        ['h', 'Threats to data security'],
+        ['p', '**Accidental losses, including human error, software, and hardware-caused breaches.** Creating operating procedures such as user authorization, uniform software installation procedures, and hardware maintenance schedules are examples of actions that may be taken to address threats from accidental losses.'],
+        ['p', '**Theft and fraud.** These activities are going to be perpetrated by people, quite possibly through electronic means, and may or may not alter data. Physical security must be established so that unauthorized persons are unable to gain access to rooms where computers, servers, telecommunications facilities, or computer files are located. Physical security should also be provided for employee offices and any other locations where sensitive data are stored or easily accessed. Establishment of a firewall to protect unauthorized access to inappropriate parts of the database through outside communication links is another example of a security procedure that will hamper people who are intent on theft or fraud.'],
+        ['p', '**Loss of privacy or confidentiality.** Loss of privacy is usually taken to mean loss of protection of data about individuals, whereas loss of confidentiality is usually taken to mean loss of protection of critical organizational data that may have strategic value to the organization. Failure to control privacy of information may lead to blackmail, bribery, public embarrassment, or stealing of user passwords. Failure to control confidentiality may lead to loss of competitiveness.'],
+        ['p', '**Loss of data integrity.** When data integrity is compromised, data will be invalid or corrupted. Unless data integrity can be restored through established backup and recovery procedures, an organization may suffer serious losses or make incorrect and expensive decisions based on the invalid data.'],
+        ['p', '**Loss of availability.** Sabotage of hardware, networks, or applications may cause the data to become unavailable to users, which again may lead to severe operational difficulties. This category of threat includes the introduction of viruses intended to corrupt data or software or to render the system unusable. It is important to counter this threat by always installing the most current antivirus software, as well as educating employees on the sources of viruses.'],
+        ['h', 'Database software data security features'],
+        ['p', '**1. Views or subschemas, which restrict user views of the database.** A view is created by querying one or more of the base tables, producing a dynamic result table for the user at the time of the request. The advantage of a view is that it can be built to present only the data (certain columns and/or rows) to which the user requires access, effectively preventing the user from viewing other data that may be private or confidential.'],
+        ['p', '**2. Domains, assertions, checks, and other integrity controls defined as database objects, which are enforced by the DBMS during database querying and updating.** Integrity controls protect data from unauthorized use and update. Often, integrity controls limit the values a field may hold and the actions that can be performed on data, or trigger the execution of some procedure, such as placing an entry in a log to record which users have done what with which data.'],
+        ['p', 'Assertions are powerful constraints that enforce certain desirable database conditions. Assertions are checked automatically by the DBMS when transactions are run involving tables or fields on which assertions exist.'],
+        ['p', 'Finally, a trigger, which includes an event, a condition, and an action, is potentially more complex than an assertion. It can prohibit inappropriate actions and cause special handling procedures to be executed.'],
+        ['p', '**3. Authorization rules, which identify users and restrict the actions they may take against a database.** Authorization rules are controls incorporated in a data management system that restrict access to data and also restrict the actions that people may take when they access data.'],
+        ['p', '**4. User-defined procedures, which define additional constraints or limitations in using a database.** User-defined procedures are user exits (or interfaces) that allow system designers to define their own security procedures in addition to the authorization rules.'],
+        ['p', '**5. Encryption procedures, which encode data in an unrecognizable form.** Encryption is the coding or scrambling of data so that humans cannot read them. Data encryption can be used to protect highly sensitive data such as customer credit card numbers or account balances.'],
+        ['p', '**6. Authentication schemes, which positively identify persons attempting to gain access to a database.** In an electronic environment, a user can prove his or her identity by supplying one or more of the following factors:'],
+        ['list', ['Something the user knows, usually a password or personal identification number (PIN)', 'Something the user possesses, such as a smart card or token', 'Some unique personal characteristic, such as a fingerprint or retinal scan']],
+        ['p', 'Authentication schemes are called one-factor, two-factor, or three-factor authentication, depending on how many of these factors are employed. Authentication becomes stronger as more factors are used.'],
+        ['p', '**7. Backup, journaling, and checkpointing capabilities, which facilitate recovery procedures.** Database recovery is a mechanism for restoring a database quickly and accurately after loss or damage. A database management system should provide four basic facilities for backup and recovery of a database:'],
+        ['list', ['**Backup facilities**, which provide periodic backup (sometimes called fallback) copies of portions of or the entire database', '**Journalizing facilities**, which maintain an audit trail of transactions and database changes', '**A checkpoint facility**, by which the DBMS periodically suspends all processing and synchronizes its files and journals to establish a recovery point', '**A recovery manager**, which allows the DBMS to restore the database to a correct condition and restart processing transactions']]
+      ],
+      quiz: [
+        { q: 'Who is typically responsible for administering database security on a **daily** basis?', o: ['Database administration', 'Data administration', 'Senior management', 'The DBMS vendor'], a: 0, why: 'Data administration writes the overall policies. Database administration runs security day to day.' },
+        { q: 'A firewall that blocks access through outside communication links mainly counters…', o: ['theft and fraud', 'loss of data integrity', 'accidental losses', 'loss of availability'], a: 0, why: 'The handout gives the firewall as a procedure against theft or fraud.' },
+        { q: 'Loss of protection of data about **individuals** is loss of…', o: ['privacy', 'confidentiality', 'availability', 'integrity'], a: 0, why: 'Confidentiality is about critical organizational data.' },
+        { q: 'Viruses that render the system unusable belong to which threat?', o: ['Loss of availability', 'Theft and fraud', 'Loss of privacy', 'Accidental losses'], a: 0, why: 'Loss of availability includes viruses and sabotage.' },
+        { q: 'Which feature presents only certain columns and/or rows to a user?', o: ['Views or subschemas', 'Encryption', 'Checkpointing', 'Journalizing'], a: 0, why: 'A view shows only the data the user needs.' },
+        { q: 'A password plus a smart card is…', o: ['two-factor authentication', 'one-factor authentication', 'three-factor authentication', 'encryption'], a: 0, why: 'Something you know plus something you possess: two factors.' },
+        { q: 'Which facility maintains an audit trail of transactions and database changes?', o: ['Journalizing facilities', 'Backup facilities', 'A checkpoint facility', 'A recovery manager'], a: 0, why: 'Journals are the audit trail.' },
+        { q: 'A trigger includes an event, a condition, and an action.', o: ['True', 'False'], a: 0, why: 'That is why a trigger is potentially more complex than an assertion.' }
+      ]
+    },
+    {
+      id: 'l1s5', title: 'Data availability',
+      sub: 'Ensuring the availability of databases to their users has always been a high-priority responsibility of database administrators.',
+      blocks: [
+        ['p', 'The growth of e-business has elevated this charge from an important goal to a business imperative. An e-business must be operational and available to its customers 24/7. Studies have shown that if an online customer does not get the service he or she expects within a few seconds, the customer will take his or her business to a competitor.'],
+        ['h', 'Costs of downtime'],
+        ['p', 'The costs of downtime (when databases are unavailable) include several components:'],
+        ['list', ['lost business during the outage', 'costs of catching up when service is restored', 'inventory shrinkage', 'legal costs', 'permanent loss of customer loyalty']],
+        ['p', 'A DBA needs to balance the costs of downtime with the costs of achieving the desired availability. It is the responsibility of database administration to minimize the impact of these interruptions. The goal is to provide a high level of availability that balances the various costs involved.'],
+        ['h', 'Measures to ensure availability'],
+        ['p', 'A new generation of hardware, software, and management techniques has been developed (and continues to be developed) to assist database administrators in achieving the high availability levels expected in today’s organizations.']
+      ],
+      quiz: [
+        { q: 'An e-business must be operational and available to its customers…', o: ['24/7', 'during office hours', 'on weekdays only', 'once a day'], a: 0, why: 'Customers expect service at any time.' },
+        { q: 'Which is **not** one of the costs of downtime listed in the handout?', o: ['Faster query processing', 'Lost business during the outage', 'Inventory shrinkage', 'Permanent loss of customer loyalty'], a: 0, why: 'Downtime never makes queries faster.' },
+        { q: 'What does a DBA balance when deciding on availability?', o: ['The costs of downtime against the costs of achieving the desired availability', 'Security against encryption', 'Tables against views', 'Data against metadata'], a: 0, why: 'The goal is a high level of availability that balances the costs.' },
+        { q: 'If an online customer does not get the expected service within a few seconds, the customer may go to a competitor.', o: ['True', 'False'], a: 0, why: 'The handout cites studies that show this.' }
+      ]
+    },
+    {
+      id: 'l1s6', title: 'Data quality',
+      sub: 'Data quality can be defined as the process for ensuring that data are fit for the use intended by measuring and improving its key characteristics.',
+      blocks: [
+        ['h', 'Characteristics of quality data'],
+        T(['Characteristic', 'Meaning'], [
+          ['**Uniqueness**', 'Each entity exists no more than once within the database, and there is a key that can be used to uniquely access each entity.'],
+          ['**Accuracy**', 'Data is realistic and believable. Data must be both accurate and precise enough for their intended use.'],
+          ['**Consistency**', 'Values for data in one data set (database) are in agreement with the values for related data in another data set (database).'],
+          ['**Completeness**', 'Data having assigned values if they need to have values, and all data needed are present.'],
+          ['**Timeliness**', 'Meeting the expectation for the time between when data are expected and when they are readily available for use.'],
+          ['**Referential integrity**', 'Data that refer to other data need to be unique and satisfy requirements to exist.']
+        ])
+      ],
+      quiz: [
+        { q: 'Each entity exists no more than once within the database, and a key can uniquely access it. Which characteristic is this?', o: ['Uniqueness', 'Accuracy', 'Timeliness', 'Completeness'], a: 0, why: 'That is the definition of uniqueness.' },
+        { q: 'A customer’s address is different in the sales database and the billing database. Which characteristic is broken?', o: ['Consistency', 'Uniqueness', 'Timeliness', 'Accuracy'], a: 0, why: 'Consistency means related data in two data sets agree.' },
+        { q: 'A required field has been left empty. Which characteristic is broken?', o: ['Completeness', 'Consistency', 'Uniqueness', 'Referential integrity'], a: 0, why: 'Completeness means data that need values have them.' },
+        { q: 'Sales figures arrive a week after managers need them. Which characteristic is broken?', o: ['Timeliness', 'Accuracy', 'Uniqueness', 'Consistency'], a: 0, why: 'Timeliness is about the time until data are available for use.' },
+        { q: 'Data must be both accurate and precise enough for their intended use. This describes…', o: ['accuracy', 'completeness', 'timeliness', 'uniqueness'], a: 0, why: 'Accuracy: realistic, believable and precise enough.' }
+      ]
+    }
+  ],
+  review: {
+    intro: 'Practise Lesson 1. Below are the handout’s guide questions. They are written answers, so answer them in your notebook. Then take the lesson quiz.',
+    guide: [
+      'Indicate whether data administration or database administration is typically responsible for each of the following functions: a. Managing the data repository; b. Installing and upgrading the DBMS; c. Conceptual data modeling; d. Managing data security and privacy; e. Database planning; f. Tuning database performance; g. Database backup and recovery.',
+      'Define the purpose and tasks associated with data administration and database administration.',
+      'Describe the changing roles of a data administrator and database administrator in the current business environment.',
+      'List the main types of threat that could affect a database system, and for each describe the controls that you would use to counteract each of them.'
+    ],
+    quiz: [
+      { q: 'Guide question 1a. Managing the data repository is typically the job of…', o: ['data administration', 'database administration'], a: 0, why: '“Managing the information repository” is a role of traditional data administration.' },
+      { q: 'Guide question 1b. Installing and upgrading the DBMS is typically the job of…', o: ['database administration', 'data administration'], a: 0, why: 'It is a role of traditional database administration.' },
+      { q: 'Guide question 1c. Conceptual data modeling is typically the job of…', o: ['data administration', 'database administration'], a: 0, why: 'The DA undertakes conceptual and logical database design.' },
+      { q: 'Guide question 1d. Managing data security and privacy is typically the job of…', o: ['database administration', 'data administration'], a: 0, why: '“Managing data security, privacy, and integrity” is a DBA role.' },
+      { q: 'Guide question 1e. Database planning is typically the job of…', o: ['data administration', 'database administration'], a: 0, why: 'Data administration includes database planning.' },
+      { q: 'Guide question 1f. Tuning database performance is typically the job of…', o: ['database administration', 'data administration'], a: 0, why: 'It is a DBA role, and takes most of a DBA’s time.' },
+      { q: 'Guide question 1g. Database backup and recovery is typically the job of…', o: ['database administration', 'data administration'], a: 0, why: '“Data backup and recovery” is a DBA role.' },
+      { q: 'Which threat do user authorization, uniform software installation procedures and hardware maintenance schedules address?', o: ['Accidental losses', 'Theft and fraud', 'Loss of privacy', 'Loss of availability'], a: 0, why: 'They are the handout’s examples for accidental losses.' },
+      { q: 'Which facility makes the DBMS periodically suspend all processing and synchronize its files and journals?', o: ['A checkpoint facility', 'A recovery manager', 'Backup facilities', 'Journalizing facilities'], a: 0, why: 'The checkpoint establishes a recovery point.' },
+      { q: 'Data that refer to other data need to be unique and satisfy requirements to exist. This is…', o: ['referential integrity', 'timeliness', 'accuracy', 'completeness'], a: 0, why: 'That is how the handout defines referential integrity.' }
+    ]
+  }
+};
+
+/* ====================================================================== LESSON 2 */
+const L2 = {
+  id: 'l2', n: 2, title: 'Introduction to SQL',
+  blurb: 'What SQL is, how to create and manage a database, SQL Server data types, keys, and creating and changing tables.',
+  outcomes: ['Concisely define each of the following key terms: relational DBMS (RDBMS), database, field, record, table, data definition language (DDL), data manipulation language (DML), data control language (DCL)', 'Define a database and tables using the SQL data definition language', 'Identify the different data types in SQL'],
+  sections: [
+    {
+      id: 'l2s1', title: 'Structured Query Language',
+      sub: 'Pronounced “S-Q-L” by some and “sequel” by others, SQL has become the de facto standard language for creating and querying relational databases. (Can the next standard be the sequel to SQL?) The primary purpose of this lesson is to introduce SQL, the most common language for relational systems.',
+      blocks: [
+        ['p', '**Structured Query Language (SQL)** is an industry-standard programming language used to insert, retrieve, modify, and delete data in a relational database. It also contains statements for defining and administering the objects in a database. SQL enables a programmer or database administrator to do the following:'],
+        ['list', ['execute queries against a database', 'retrieve data from a database', 'insert records in a database', 'update records in a database', 'delete records from a database', 'create new databases', 'create new tables in a database', 'create stored procedures in a database', 'create views in a database', 'set permissions on tables, procedures, and views']],
+        ['h', 'A brief history of SQL'],
+        T(['Year', 'Event'], [['1970', 'E. Codd develops relational database concept'], ['1974–1979', 'System R with Sequel (later SQL) created at IBM Research Lab'], ['1979', 'Oracle markets first relational DB with SQL'], ['1986', 'ANSI SQL standard released'], ['1989, 1992, 1999, 2003', 'Major ANSI standard updates'], ['Current', 'SQL is supported by most major database vendors']]),
+        ['h', 'What is a relational database?'],
+        ['p', 'A **relational database** is a database divided into logical units called tables, where tables are related to one another within the database. Relational database allows data to be broken down into logical, smaller, and manageable units for easier maintenance and better performance.'],
+        ['p', '**Tables** are collections of rows and columns. Tables are related to one another through common keys or fields in a relational database system. That is why, even though the desired data may exist in more than one table, you can easily join multiple tables together to get a combined data set using a single query.'],
+        ['p', 'A **field** or **column** is a single characteristic, attribute or property that provides information about an object, while a **record** or **row** is a complete set of all the fields/attributes combined together for a particular object.'],
+        ['tables'],
+        ['h', 'Three categories of SQL'],
+        T(['Category', 'What its commands do', 'Sample commands'], [
+          ['**Data Definition Language (DDL)**', 'Commands used to define a database, including those for creating, altering, and dropping tables and establishing constraints.', '`CREATE`, `ALTER`, `DROP`'],
+          ['**Data Manipulation Language (DML)**', 'Commands used for updating, inserting, modifying, and querying the data in the database.', '`INSERT`, `UPDATE`, `DELETE`, `SELECT`'],
+          ['**Data Control Language (DCL)**', 'Commands that help a DBA control the database; they include commands to grant or revoke privileges to access the database or particular objects within the database and to store or remove transactions that would affect the database.', '`GRANT`, `REVOKE`']
+        ]),
+        ['note', 'The handout does not list sample DCL commands. GRANT and REVOKE are the commands that grant or revoke privileges.', { label: 'Note' }]
+      ],
+      quiz: [
+        { q: 'Which category of SQL do `CREATE`, `ALTER` and `DROP` belong to?', o: ['Data Definition Language (DDL)', 'Data Manipulation Language (DML)', 'Data Control Language (DCL)', 'None of these'], a: 0, why: 'DDL commands define the database.' },
+        { q: 'Which category does `SELECT` belong to?', o: ['DML', 'DDL', 'DCL', 'None of these'], a: 0, why: 'The handout lists INSERT, UPDATE, DELETE and SELECT as DML.' },
+        { q: 'Commands to grant or revoke privileges belong to…', o: ['DCL', 'DDL', 'DML', 'None of these'], a: 0, why: 'DCL helps a DBA control the database.' },
+        { q: 'A single characteristic, attribute or property of an object is a…', o: ['field or column', 'record or row', 'table', 'database'], a: 0, why: 'A record is the complete set of fields for one object.' },
+        { q: 'Who developed the relational database concept, in 1970?', o: ['E. Codd', 'Oracle', 'ANSI', 'IBM Research Lab'], a: 0, why: 'IBM later created System R with Sequel.' },
+        { q: 'In what year was the ANSI SQL standard first released?', o: ['1986', '1970', '1979', '2003'], a: 0, why: 'Updates followed in 1989, 1992, 1999 and 2003.' },
+        { q: 'Tables in a relational database are related through common keys or fields.', o: ['True', 'False'], a: 0, why: 'That is what lets one query join several tables.' }
+      ]
+    },
+    {
+      id: 'l2s2', title: 'Managing databases',
+      sub: 'Before doing anything with the data we must create a database first. It is assumed that you already have SQL Server available for your use.',
+      blocks: [
+        RO,
+        ['h', 'Creating a database'],
+        ['p', 'The basic syntax for creating a database can be given with:'],
+        ['code', 'CREATE DATABASE databasename', { cap: 'Syntax' }],
+        ['p', 'The following SQL statement creates a database named demo:'],
+        ['code', 'CREATE DATABASE demo'],
+        ['p', 'A DBMS can manage multiple databases on one computer. Therefore, we need to select the database that we want to use. Once the database is selected, we can proceed with creating tables or querying data. Write the following SQL statement for using the database:'],
+        ['code', 'USE demo'],
+        ['h', 'Renaming a database'],
+        ['p', 'To rename a database in SQL Server, use the command `sp_renamedb`.'],
+        ['code', "sp_renamedb [@dbname=] 'old_name' , [@newname =] 'new_name'", { cap: 'Syntax' }],
+        ['p', 'The following SQL statement renames the accounting database to financial:'],
+        ['code', "sp_renamedb 'accounting', 'financial'"],
+        ['h', 'Deleting a database'],
+        ['p', 'To delete an existing database in SQL Server, use the command `DROP DATABASE`.'],
+        ['code', 'DROP DATABASE databasename', { cap: 'Syntax' }],
+        ['note', 'Be careful before dropping a database. Deleting a database will result in loss of complete information stored in the database!', { label: 'Note' }]
+      ],
+      quiz: [
+        { q: 'Which statement creates a database named demo?', o: ['CREATE DATABASE demo', 'NEW DATABASE demo', 'USE demo', 'MAKE demo'], a: 0, why: 'The syntax is CREATE DATABASE databasename.' },
+        { q: 'Why do we need `USE demo`?', o: ['A DBMS can manage multiple databases, so we select the one we want to use', 'It creates the database', 'It deletes the database', 'It renames the database'], a: 0, why: 'After USE, tables are created and queried in that database.' },
+        { q: 'Which command renames a database in SQL Server?', o: ['sp_renamedb', 'sp_rename', 'ALTER DATABASE RENAME', 'RENAME DATABASE'], a: 0, why: 'sp_renamedb takes the old name, then the new name.' },
+        { q: 'What does `DROP DATABASE` do to the information stored in the database?', o: ['It is completely lost', 'It is kept in a backup automatically', 'It moves to another database', 'Nothing'], a: 0, why: 'That is why the handout says to be careful.' }
+      ]
+    },
+    {
+      id: 'l2s3', title: 'Tables and data types',
+      sub: 'Tables are database objects that store data in a collection of rows and columns. Each row represents a unique record, and each column represents a field within the record.',
+      blocks: [
+        ['h', 'Naming tables and columns'],
+        ['list', ['Spaces and other symbols may be used if delimited by double quotation marks or brackets `[ ]`. This is not recommended, as the delimiter must always be used when referencing that name. Example: `"First Name"` or `[First Name]`.', 'Table names can be up to 128 characters.', 'Table names must begin with an alphabetic character and can also contain underscores (`_`), “at” symbols (`@`), pound signs (`#`), and numerals.', 'Each table can have up to 1,024 columns.']],
+        ['h', 'Data types'],
+        ['p', 'A **data type** is an attribute that specifies the type of data that the column can store. The data type of an attribute decides the operations that can be performed on the data of that attribute. For example, arithmetic operations can be performed on numeric data but not on character data. Commonly used data types in SQL Server are numeric types (exact and approximate), date and time types, character string and Unicode character string types, and miscellaneous types.'],
+        IMG('sql-server-data-types.png', 'Mind map of SQL Server data types. Exact numerics: bigint, bit, decimal, int, money, numeric, smallint, smallmoney, tinyint. Approximate numerics: float, real. Date and time: date, datetime2, datetime, datetimeoffset, smalldatetime, time. Character strings: char, text, varchar. Unicode character strings: nchar, ntext, nvarchar. Binary strings: binary, image, varbinary. Others: cursor, hierarchyid, sql_variant, spatial geometry types, table, rowversion, uniqueidentifier, xml, spatial geography types.', 952, 976, 'SQL Server Data Types System'),
+        ['h', 'Exact numeric data types'],
+        ['p', 'Exact numeric data types store exact numbers such as integer, decimal, or monetary amount.'],
+        ['list', ['The `bit` stores one of three values: 0, 1, and NULL.', 'The `int`, `bigint`, `smallint`, and `tinyint` data types store integer data.', 'The `decimal` and `numeric` data types store numbers that have fixed precision and scale. Note that decimal and numeric are synonyms.', 'The `money` and `smallmoney` data types store currency values.']],
+        T(['Data type', 'Range', 'Storage (bytes)'], [
+          ['`tinyint`', '0 to 255', '1'],
+          ['`smallint`', '-32,768 to 32,767', '2'],
+          ['`int`', '-2^31 (-2,147,483,648) to 2^31-1 (2,147,483,647)', '4'],
+          ['`bigint`', '-2^63 (-9,223,372,036,854,775,808) to 2^63-1 (9,223,372,036,854,775,807)', '8'],
+          ['`bit`', '1, 0 or NULL', '1'],
+          ['`decimal`/`numeric`', '-10^38 +1 through 10^38 – 1 when maximum precision is used', '5-17'],
+          ['`money`', '-922,337,203,685,477.5808 to 922,337,203,685,477.5807', '8'],
+          ['`smallmoney`', '-214,748.3648 to 214,748.3647', '4']
+        ]),
+        ['h', 'Approximate numeric data types'],
+        ['p', 'The approximate numeric data type stores floating point numeric data. They are often used in scientific calculations. Values of float are truncated when converted to integer types.'],
+        T(['Data type', 'Range', 'Storage (bytes)'], [
+          ['`float(n)`', '-1.79E+308 to -2.23E-308, 0 and 2.23E-308 to 1.79E+308', 'Depends on value of n, 4 or 8 bytes'],
+          ['`real`', '-3.40E+38 to -1.18E-38, 0 and 1.18E-38 to 3.40E+38', '4']
+        ]),
+        ['h', 'Date and time data types'],
+        ['p', 'The date and time data types store date and time data, and the date time offset (specific date and time zone).'],
+        T(['Data type', 'Storage (bytes)', 'Date range', 'Accuracy', 'Recommended entry format'], [
+          ['`DATETIME`', '8', 'January 1, 1753 to December 31, 9999', '3-1/3 milliseconds', '‘YYMMDD hh:mm:ss:nnn’'],
+          ['`SMALLDATETIME`', '4', 'January 1, 1900 to June 6, 2079', '1 minute', '‘YYMMDD hh:mm:ss:nnn’'],
+          ['`DATETIME2`', '6 to 8', 'January 1, 0001 to December 31, 9999', '100 nanoseconds', '—'],
+          ['`DATE`', '3', 'January 1, 0001 to December 31, 9999', '1 day', '‘YYYY-MM-DD’'],
+          ['`TIME`', '3 to 5', '—', '100 nanoseconds', '‘hh:mm:ss:nnnnnnn’'],
+          ['`DATETIMEOFFSET`', '8 to 10', 'January 1, 0001 to December 31, 9999', '100 nanoseconds', '‘YYYY-MM-DD hh:mm:ss:nnnnnnn [+|-]hh:mm’']
+        ]),
+        ['h', 'Character string data types'],
+        ['p', 'Character data consists of any combination of letters, symbols, and numeric characters. Character string data types allow you to store either fixed-length (`char`) or variable-length data (`varchar`).'],
+        T(['Data type', 'Range', 'Storage'], [['`CHAR(n)`', '1-8000 characters', 'n bytes, padded'], ['`VARCHAR(n)`', '1-8000 characters', 'n bytes'], ['`VARCHAR(MAX)`', '1-2^31-1 characters', 'Actual length + 2']]),
+        ['h', 'Unicode character string data types'],
+        ['p', 'Unicode character string data types store either fixed-length (`nchar`) or variable-length (`nvarchar`) Unicode character data.'],
+        T(['Data type', 'Range', 'Storage'], [['`NCHAR(n)`', '1-4000 characters', 'n bytes, padded'], ['`NVARCHAR(n)`', '1-4000 characters', 'n bytes']]),
+        ['h', 'Binary string data types'],
+        ['p', 'The binary data types store fixed and variable length binary data.'],
+        T(['Data type', 'Range', 'Storage'], [['`BINARY`', '0-8000 bytes', 'n bytes, padded'], ['`VARBINARY`', '0-8000 bytes', 'Actual length + 2']]),
+        ['note', '`CHAR(10)` always uses 10 bytes. The value “Ana” is padded with spaces to fill them. `VARCHAR(10)` stores “Ana” as just its 3 characters. Use CHAR when every value has the same length, such as a code. Use VARCHAR when lengths vary, such as names.', { label: 'CHAR or VARCHAR?' }]
+      ],
+      quiz: [
+        { q: 'How many characters can a table name have, at most?', o: ['128', '64', '1,024', '8,000'], a: 0, why: 'Table names can be up to 128 characters.' },
+        { q: 'How many columns can each table have, at most?', o: ['1,024', '128', '255', '8,000'], a: 0, why: 'Each table can have up to 1,024 columns.' },
+        { q: 'Which is a valid way to name a column that has a space in it?', o: ['[First Name]', 'First Name', '(First Name)', '{First Name}'], a: 0, why: 'Use double quotation marks or square brackets.' },
+        { q: 'Which values can a `bit` column hold?', o: ['0, 1 and NULL', 'Any whole number', 'TRUE and FALSE text', '0 to 255'], a: 0, why: 'bit stores one of three values: 0, 1 and NULL.' },
+        { q: 'Which data type has the range 0 to 255 and uses 1 byte?', o: ['tinyint', 'smallint', 'bit', 'int'], a: 0, why: 'tinyint is the smallest integer type.' },
+        { q: '`decimal` and `numeric` are synonyms.', o: ['True', 'False'], a: 0, why: 'Both store numbers with fixed precision and scale.' },
+        { q: 'Which data types store currency values?', o: ['money and smallmoney', 'float and real', 'int and bigint', 'char and varchar'], a: 0, why: 'money and smallmoney are exact numeric types for currency.' },
+        { q: 'What is the difference between `CHAR(n)` and `VARCHAR(n)`?', o: ['CHAR is fixed-length and padded; VARCHAR is variable-length', 'CHAR stores numbers; VARCHAR stores text', 'CHAR is Unicode; VARCHAR is not', 'There is no difference'], a: 0, why: 'CHAR(n) uses n bytes, padded. VARCHAR stores variable-length data.' },
+        { q: 'Which type stores variable-length **Unicode** character data?', o: ['nvarchar', 'varchar', 'nchar', 'varbinary'], a: 0, why: 'nchar is fixed-length Unicode. nvarchar is variable-length Unicode.' },
+        { q: 'Which date type has an accuracy of 1 day and the entry format ‘YYYY-MM-DD’?', o: ['DATE', 'DATETIME', 'SMALLDATETIME', 'TIME'], a: 0, why: 'DATE uses 3 bytes and stores only the date.' }
+      ]
+    },
+    {
+      id: 'l2s4', title: 'NULL, primary key and foreign key',
+      sub: 'Three ideas you need before you create a table: NULL, the primary key, and the foreign key.',
+      blocks: [
+        ['h', 'Null'],
+        ['p', 'A value that may be assigned to an attribute when no other value applies or when the applicable value is unknown.'],
+        ['p', 'A null value, or NULL, is not the same as zero (0), blank, or a zero-length or empty character string such as “”. NULL means that no entry has been made.'],
+        ['h', 'Primary key'],
+        ['p', 'A **primary key** is a field or a combination of fields that identifies a record uniquely. The primary key is a column or set of columns that are unique. In other words, every value is unique for a primary key. Every table should have a primary key.'],
+        ['p', '**Rules for primary key**'],
+        ['list', ['Each table can have only one primary key.', 'All the values are unique and the primary key value can uniquely identify each row.', 'The system will not allow inserting a row with a primary key which already exists in the table.', 'Primary key cannot be NULL.']],
+        ['p', 'The diagram below summarizes all the above points for the primary key.'],
+        IMG('primary-key.png', 'Diagram. Column 1 is the primary key and all its values (A, B, C, D) are unique. A person tries to enter a new row with D in Column 1. MS SQL refuses with the error: I cannot allow this row to enter, I already have D in my Column 1 which is Primary Key.', 820, 508, 'Primary key: a duplicate value is refused'),
+        ['h', 'Foreign key'],
+        ['p', 'A **foreign key** provides a way of enforcing referential integrity within SQL Server. In simple words, a foreign key ensures values in one table must be present in another table.'],
+        ['p', '**Rules for foreign key**'],
+        ['list', ['NULL is allowed in a foreign key.', 'The table being referenced is called the **parent table**.', 'The table with the foreign key is called the **child table** or dependent table.', 'The foreign key in the child table references the primary key in the parent table.', 'This parent-child relationship enforces the rule which is known as “Referential Integrity.”']],
+        ['p', 'The diagram below summarizes all the above points for the foreign key.'],
+        IMG('foreign-key.png', 'Diagram. The parent table has Column 1 as its primary key with values A, B, C, D. The child table has Column 1 as a foreign key with values A, B and NULL. A person tries to insert a row with G in Column 1 of the child table. MS SQL refuses because G is not in Column 1 of the parent table.', 954, 526, 'Foreign key: a value that is not in the parent table is refused'),
+        ['p', 'You can see a real primary key and foreign key in the practice tables: `Products.CategoryID` is a foreign key. It refers to `Categories.CategoryID`, the primary key of Categories. Every product’s category must exist in Categories.'],
+        ['demo', 'SELECT CategoryID, CategoryName\nFROM   Categories', { title: 'The parent table', after: 'CategoryID is unique in Categories. It is the primary key.' }]
+      ],
+      quiz: [
+        { q: 'NULL is the same as zero (0).', o: ['True', 'False'], a: 1, why: 'NULL is not zero, blank or an empty string. It means no entry has been made.' },
+        { q: 'How many primary keys can a table have?', o: ['Only one', 'One per column', 'Up to 1,024', 'None'], a: 0, why: 'Each table can have only one primary key. It may combine several columns.' },
+        { q: 'Can a primary key value be NULL?', o: ['No', 'Yes', 'Only once', 'Only in a child table'], a: 0, why: 'A primary key cannot be NULL.' },
+        { q: 'Is NULL allowed in a foreign key?', o: ['Yes', 'No'], a: 0, why: 'The handout’s first rule for foreign keys says NULL is allowed.' },
+        { q: 'The table that holds the foreign key is called the…', o: ['child table or dependent table', 'parent table', 'base table', 'view'], a: 0, why: 'The referenced table is the parent.' },
+        { q: 'A foreign key in the child table references the ___ in the parent table.', o: ['primary key', 'foreign key', 'first column', 'NULL value'], a: 0, why: 'This parent-child link enforces referential integrity.' },
+        { q: 'In the diagram, why is the row with G refused?', o: ['G is not in Column 1 of the parent table', 'G is a duplicate', 'G is NULL', 'The child table is full'], a: 0, why: 'A foreign key value must exist in the parent table.' }
+      ]
+    },
+    {
+      id: 'l2s5', title: 'Creating and modifying tables',
+      sub: 'Use CREATE TABLE to make a table, ALTER TABLE to change it, sp_rename to rename it or its columns, and DROP TABLE to delete it.',
+      blocks: [
+        RO,
+        ['h', 'Creating a table'],
+        ['code', 'CREATE TABLE tableName\n(\n  column_1 datatype [ NULL | NOT NULL ],\n  column_2 datatype [ NULL | NOT NULL ]\n  [ DEFAULT constant_expression ]\n  [ IDENTITY [(seed, increment)] ]\n  [ CONSTRAINT constraint_name ]\n  ...\n)', { cap: 'Syntax' }],
+        ['list', ['The parameter `tableName` denotes the name of the table that you are going to create.', 'The parameters `column_1`, `column_2`… denote the columns to be added to the table.', 'A column should be specified as either NULL or NOT NULL. If you don’t specify, SQL Server will take NULL as the default.', 'A **default** value to a column may be assigned but is optional. It is the value you want to be used for the column for any row that is inserted without explicitly supplying a value for that particular column.', 'A column may be an **identity**, but this is optional. An identity column is used to create a column that contains system-generated sequential values to identify each row inserted into a table. The (seed, increment) values will default to (1,1) if not specified.']],
+        T(['Term', 'Meaning'], [['Identity seed', 'Provides the starting value for an identity column.'], ['Identity increment', 'Defines how an identity will increase or decrease with each new row added to a table.']]),
+        ['h', 'Create a basic table with two columns'],
+        ['code', 'CREATE TABLE COURSE\n(\n  CourseID   Numeric NOT NULL,\n  CourseCode Varchar(100) NOT NULL\n)'],
+        ['h', 'Create a table with an identity column and a primary key'],
+        ['code', 'CREATE TABLE JOB\n(\n  JobID   Numeric IDENTITY (1,1) NOT NULL,\n  JobDesc Varchar(100) NOT NULL,\n  CONSTRAINT PK_Job PRIMARY KEY(JobID)\n)'],
+        ['list', ['The table is named JOB and has two columns.', 'JobID has a numeric data type and is an identity column. This means that this column will have system-generated sequential values starting from the seed (1) and will increment by 1.', 'This table assigns JobID as a primary key constraint named PK_Job. The constraint name is user defined.']],
+        ['h', 'Create a table that has a primary key, a default value and a foreign key'],
+        ['code', 'CREATE TABLE dbo.EMPLOYEES\n(\n  EmpNo NUMERIC NOT NULL\n    CONSTRAINT PK_empID PRIMARY KEY,\n  LName VARCHAR (20) NOT NULL,\n  FName VARCHAR (20) NOT NULL,\n  MName VARCHAR (20),\n  Active_Flag BIT NOT NULL DEFAULT 1,\n  JobID SMALLINT NOT NULL\n    CONSTRAINT FK_jobID FOREIGN KEY\n    REFERENCES dbo.JOBS (JobID)\n)'],
+        ['list', ['The table is named EMPLOYEES and has six columns.', 'EmpNo is a numeric data type and also the primary key.', 'LName and FName are both varchar with a length of 20 and do not allow null values.', 'MName is varchar with a size of 20. Since it was not specified as either NULL or NOT NULL, it will take NULL as the default.', 'Active_Flag has a bit data type, which means that the allowed values are only 1 and 0. It also has a default constraint, which means that when the user specifies no value for the column on insert, it will take the default value, which is 1.', 'A foreign key has been assigned to the JobID column. Remember that a foreign key should reference a parent table where it is a primary key. The data type of a foreign key should match the data type of the primary key it references.']],
+        ['note', 'The handout says EMPLOYEES has seven columns, but the statement defines six: EmpNo, LName, FName, MName, Active_Flag and JobID.', { label: 'Note' }],
+        ['h', 'Modifying a table'],
+        ['code', 'ALTER TABLE table_name\n{ [ ALTER COLUMN column_name datatype ]\n  | ADD {[column definition]}\n  | DROP {[CONSTRAINT] constraint_name | COLUMN column}\n}', { cap: 'Syntax' }],
+        ['h', 'Alter a table to add a new column'],
+        ['code', 'ALTER TABLE table_name\nADD column_1 datatype [ NULL | NOT NULL ]', { cap: 'Syntax' }],
+        ['code', 'ALTER TABLE COURSE\nADD CourseDuration VARCHAR(100)', { cap: 'The ALTER statement adds a new column CourseDuration to the COURSE table.' }],
+        ['h', 'Alter a table to drop a column'],
+        ['code', 'ALTER TABLE table_name\nDROP COLUMN column_name', { cap: 'Syntax' }],
+        ['code', 'ALTER TABLE COURSE\nDROP COLUMN CourseDuration', { cap: 'The ALTER statement removes the column CourseDuration from the COURSE table.' }],
+        ['h', 'Alter a table to change the data type of a column'],
+        ['code', 'ALTER TABLE table_name\nALTER COLUMN column_name datatype', { cap: 'Syntax' }],
+        ['code', 'ALTER TABLE COURSE\nALTER COLUMN CourseCode CHAR(20)', { cap: 'The ALTER statement changes the data type of the CourseCode column on the COURSE table to CHAR(20).' }],
+        ['h', 'Alter a table to assign a constraint to an existing column'],
+        ['code', 'ALTER TABLE table_name\nADD CONSTRAINT constraint_name\nconstraint_type(column_name)', { cap: 'Syntax' }],
+        ['code', 'ALTER TABLE COURSE\nADD CONSTRAINT PK_Course\nPRIMARY KEY (CourseID)', { cap: 'The ALTER statement adds a primary key constraint on CourseID to the COURSE table.' }],
+        ['h', 'Renaming a table'],
+        ['p', 'Use the SQL command `sp_rename` followed by the old table name, then the new table name.'],
+        ['code', "sp_rename 'old_table_name', 'new_table_name'", { cap: 'Syntax' }],
+        ['code', "sp_rename 'EMPLOYEES', 'EMPLOYEE'", { cap: 'Rename the EMPLOYEES table to EMPLOYEE.' }],
+        ['h', 'Renaming a column of a table'],
+        ['p', 'Use the SQL command `sp_rename` followed by the old column name, then the new column name, and the last parameter is the keyword `column`.'],
+        ['code', "sp_rename 'table_name.old_column_name', 'new_column_name', 'column'", { cap: 'Syntax' }],
+        ['code', "sp_rename 'JOB.JobDesc', 'JobDescription', 'column'", { cap: 'Rename the JobDesc column of the JOB table to JobDescription.' }],
+        ['h', 'Dropping a table'],
+        ['p', 'Use the DROP command to drop or delete a table.'],
+        ['code', 'DROP TABLE table_name', { cap: 'Syntax' }],
+        ['code', 'DROP TABLE COURSE']
+      ],
+      quiz: [
+        { q: 'If you do not say NULL or NOT NULL for a column, SQL Server takes…', o: ['NULL as the default', 'NOT NULL as the default', 'an error', 'a primary key'], a: 0, why: 'That is why MName in EMPLOYEES allows NULL.' },
+        { q: 'What does `IDENTITY (1,1)` mean?', o: ['System-generated values starting at 1 and going up by 1', 'The column must equal 1', 'The column is the first and only column', 'One NULL is allowed'], a: 0, why: 'The first number is the seed, the second the increment.' },
+        { q: 'If the seed and increment of an identity are not given, they default to…', o: ['(1,1)', '(0,1)', '(1,0)', '(0,0)'], a: 0, why: 'The handout says (seed, increment) defaults to (1,1).' },
+        { q: 'Which statement adds a column CourseDuration to COURSE?', o: ['ALTER TABLE COURSE ADD CourseDuration VARCHAR(100)', 'ALTER COURSE ADD COLUMN CourseDuration', 'UPDATE COURSE ADD CourseDuration', 'CREATE COLUMN CourseDuration ON COURSE'], a: 0, why: 'ALTER TABLE … ADD column datatype.' },
+        { q: 'Which statement changes CourseCode to CHAR(20)?', o: ['ALTER TABLE COURSE ALTER COLUMN CourseCode CHAR(20)', 'ALTER TABLE COURSE MODIFY CourseCode CHAR(20)', 'UPDATE COURSE SET CourseCode = CHAR(20)', 'ALTER COLUMN CourseCode CHAR(20)'], a: 0, why: 'In SQL Server the clause is ALTER COLUMN.' },
+        { q: 'How do you rename the JobDesc column of JOB to JobDescription?', o: ["sp_rename 'JOB.JobDesc', 'JobDescription', 'column'", "sp_renamedb 'JobDesc', 'JobDescription'", "ALTER TABLE JOB RENAME JobDesc", "sp_rename 'JobDesc', 'JobDescription'"], a: 0, why: 'Give table.old_column, the new name, then the keyword column.' },
+        { q: 'In EMPLOYEES, what value does Active_Flag get when an insert gives no value for it?', o: ['1', '0', 'NULL', 'An error'], a: 0, why: 'It has DEFAULT 1.' },
+        { q: 'A foreign key’s data type should match the data type of the primary key it references.', o: ['True', 'False'], a: 0, why: 'The handout says this under the EMPLOYEES example.' }
+      ]
+    }
+  ],
+  review: {
+    intro: 'Practise Lesson 2. Below are the handout’s guide questions. Answer them in your notebook. For questions 6 and 7, write the CREATE TABLE statements and run them in SQL Server. This site’s database is read-only, so it cannot check them. Then take the lesson quiz.',
+    guide: [
+      'Distinguish among data definition commands, data manipulation commands, and data control commands.',
+      'Describe the data types in SQL.',
+      'What’s the difference between VARCHAR and CHAR? When would you use one over the other?',
+      'Discuss each of the clauses of the CREATE TABLE statement.',
+      'What is identity in SQL?',
+      'Write SQL statements that will create the following tables: Hotel (HotelNo, HotelName, City); Room (RoomNo, HotelNo, Type, Price); Guest (GuestNo, LastName, FirstName, Address, ContactNo); Booking (BookingNo, HotelNo, GuestNo, DateFrom, DateTo, RoomNo).',
+      'Using the relational table, write SQL statements that will create the tables.'
+    ],
+    quiz: [
+      { q: '`INSERT`, `UPDATE` and `DELETE` are…', o: ['data manipulation commands', 'data definition commands', 'data control commands', 'stored procedures'], a: 0, why: 'They change the data, not the structure.' },
+      { q: 'Which command would you use to remove a whole table?', o: ['DROP TABLE', 'DELETE TABLE', 'ALTER TABLE … DROP', 'REMOVE TABLE'], a: 0, why: 'DROP is a DDL command.' },
+      { q: 'You need a column for a 2-letter country code that is always 2 characters. Which type fits best?', o: ['CHAR(2)', 'VARCHAR(MAX)', 'NVARCHAR(4000)', 'int'], a: 0, why: 'Fixed-length data suits CHAR.' },
+      { q: 'You need a column for people’s last names, which vary in length. Which type fits best?', o: ['VARCHAR(50)', 'CHAR(50)', 'bit', 'money'], a: 0, why: 'VARCHAR stores only the actual length.' },
+      { q: 'Which is the best data type for a room price such as 2500.00?', o: ['money', 'bit', 'varchar(10)', 'date'], a: 0, why: 'money stores currency values exactly.' },
+      { q: 'Which line makes HotelNo the primary key of Hotel?', o: ['CONSTRAINT PK_Hotel PRIMARY KEY (HotelNo)', 'HotelNo PRIMARY', 'KEY HotelNo', 'HotelNo IDENTITY KEY'], a: 0, why: 'A named primary key constraint at the table level.' },
+      { q: 'In Room (RoomNo, HotelNo, Type, Price), HotelNo should be…', o: ['a foreign key that references Hotel (HotelNo)', 'the only primary key of Hotel', 'an identity column', 'NULL always'], a: 0, why: 'Each room belongs to a hotel that must exist.' },
+      { q: 'An identity column contains system-generated sequential values.', o: ['True', 'False'], a: 0, why: 'That is what identity means in SQL Server.' }
+    ]
+  }
+};
+
+/* ====================================================================== LESSON 3 */
+const L3 = {
+  id: 'l3', n: 3, title: 'Constraints',
+  blurb: 'Keep data accurate with domain, entity and referential integrity, and with PRIMARY KEY, FOREIGN KEY, UNIQUE, DEFAULT and CHECK constraints.',
+  outcomes: ['Enforce data integrity', 'Describe constraints', 'Create and maintain constraints'],
+  sections: [
+    {
+      id: 'l3s1', title: 'Data integrity',
+      sub: 'Constraints are a very important feature in a relational model. The relational model supports the well-defined theory of constraints on attributes or tables. Constraints are useful because they allow a designer to specify the semantics of data in the database.',
+      blocks: [
+        ['p', 'The term **data integrity** refers to the overall accuracy, consistency, and completeness of data. Data integrity is usually imposed during the database design phase through the use of standard procedures and rules. Data integrity can be maintained through the use of various error-checking methods and validation procedures.'],
+        ['h', 'Categories of data integrity'],
+        ['p', 'The following three integrity constraints are used in a relational database structure to achieve data integrity:'],
+        ['list', ['Domain Integrity', 'Entity Integrity', 'Referential Integrity']],
+        ['h', 'Domain integrity'],
+        ['p', 'Also known as **column integrity**, this integrity specifies a set of data values that are valid for a column. This can be defined by the data type, format, data length, nullability, default value and range of allowable values.'],
+        ['h', 'Entity integrity'],
+        ['p', 'Also known as **row integrity**, this integrity requires that all the rows in a table have a unique identifier, enforced by either a PRIMARY KEY or UNIQUE constraint. The rule states that every table must have its own primary key and that each has to be unique and not null.'],
+        ['h', 'Referential integrity'],
+        ['p', 'This is the concept of foreign keys: a state in which all foreign key values in the database are valid. For a foreign key to be valid, it must contain either the value NULL, or an existing key value from the PRIMARY KEY or UNIQUE KEY columns referenced by the foreign key. The referenced row cannot be deleted if a FOREIGN KEY refers to it, nor can its key value be changed if a FOREIGN KEY refers to it.'],
+        T(['Integrity', 'Also known as', 'Enforced by'], [['Domain', 'column integrity', 'data type, format, length, nullability, default value, range of allowable values (CHECK, DEFAULT)'], ['Entity', 'row integrity', 'PRIMARY KEY or UNIQUE constraint'], ['Referential', '—', 'FOREIGN KEY constraint']])
+      ],
+      quiz: [
+        { q: 'Data integrity refers to the overall ___ of data.', o: ['accuracy, consistency, and completeness', 'size and speed', 'security and encryption', 'format and style'], a: 0, why: 'That is the handout’s definition.' },
+        { q: 'Which integrity is also known as **column** integrity?', o: ['Domain integrity', 'Entity integrity', 'Referential integrity', 'Data quality'], a: 0, why: 'It defines the valid values for a column.' },
+        { q: 'Which integrity is also known as **row** integrity?', o: ['Entity integrity', 'Domain integrity', 'Referential integrity', 'Check integrity'], a: 0, why: 'Every row needs a unique identifier.' },
+        { q: 'Entity integrity is enforced by…', o: ['a PRIMARY KEY or UNIQUE constraint', 'a DEFAULT constraint', 'a CHECK constraint', 'a view'], a: 0, why: 'They make each row uniquely identifiable.' },
+        { q: 'For a foreign key to be valid, it must contain…', o: ['NULL, or an existing key value from the referenced columns', 'any value', 'a value that is not in the parent table', 'only numbers'], a: 0, why: 'This is referential integrity.' },
+        { q: 'A parent row can be deleted while a FOREIGN KEY still refers to it.', o: ['True', 'False'], a: 1, why: 'The referenced row cannot be deleted, and its key value cannot be changed.' }
+      ]
+    },
+    {
+      id: 'l3s2', title: 'Constraints, primary keys and foreign keys',
+      sub: 'Constraints are business logic that your database server enforces for you.',
+      blocks: [
+        ['p', 'Constraints are used to specify rules for the data in a table. Constraints are used to limit the type of data that can go into a table. This ensures the accuracy and reliability of the data in the table. Constraints prevent the deletion of a table if there are dependencies. If there is any violation between the constraint and the data action, the action is aborted.'],
+        ['h', 'Constraint guidelines'],
+        ['list', ['The constraint can be created within the CREATE TABLE T-SQL command while creating the table, or can be added using the ALTER TABLE T-SQL command after creating the table.', 'Constraints in SQL Server can be defined at the **column level**, where it is specified as part of the column definition and will be applied to that column only, or declared independently at the **table level**. In this case, the constraint rules will be applied to more than one column in the specified table.']],
+        ['h', 'Types of constraints'],
+        ['p', 'The following constraints are commonly used in SQL:'],
+        ['list', ['Primary Key Constraints', 'Foreign Key Constraints', 'Check Constraints', 'Default Constraints', 'Unique Constraints']],
+        RO,
+        ['h', 'Primary key constraints'],
+        ['p', 'A PRIMARY KEY constraint ensures no duplicate values are entered in particular columns and that NULL values are not entered in those columns. If an attempt is made to insert a row of data with a duplicate value or NULL value for the primary key, an error message will result and the insert is not allowed.'],
+        ['code', 'CREATE TABLE Student\n( StudentID INT CONSTRAINT PK_Student PRIMARY KEY\n, Name VARCHAR(60) NOT NULL\n, BirthDate DATE\n)', { cap: 'Creating primary key constraints on CREATE TABLE: column level' }],
+        ['code', 'CREATE TABLE Student\n( StudentID INT,\n  Name VARCHAR(60) NOT NULL,\n  BirthDate DATE,\n  CONSTRAINT PK_Student PRIMARY KEY (StudentID)\n)', { cap: 'Creating primary key constraints on CREATE TABLE: table level' }],
+        ['code', 'ALTER TABLE Student\nADD CONSTRAINT PK_Student PRIMARY KEY (StudentID)', { cap: 'Creating primary key constraints on ALTER TABLE' }],
+        ['h', 'Foreign key constraints'],
+        ['list', ['A FOREIGN KEY constraint governs the link between the parent or referenced table and the child or referencing table.', 'This constraint enforces referential integrity between tables.', 'The number and data type of the columns in the parent table key must match the number and data type of the columns in the child table.']],
+        ['code', 'CREATE TABLE LECTURER\n(\n  LecturerID NUMERIC NOT NULL,\n  LecturerName VARCHAR(20),\n  CourseID NUMERIC\n    CONSTRAINT FK_Lecturer_Course FOREIGN KEY\n    REFERENCES COURSE (CourseID)\n)', { cap: 'Creating foreign key constraints on CREATE TABLE: column level' }],
+        ['code', 'CREATE TABLE LECTURER\n(\n  LecturerID NUMERIC NOT NULL,\n  LecturerName VARCHAR(20),\n  CourseID NUMERIC,\n  CONSTRAINT FK_Lecturer_Course FOREIGN KEY (CourseID)\n    REFERENCES COURSE (CourseID)\n)', { cap: 'Creating foreign key constraints on CREATE TABLE: table level' }],
+        ['code', 'ALTER TABLE LECTURER\nADD CONSTRAINT FK_Lecturer_Course\nFOREIGN KEY (CourseID)\nREFERENCES COURSE (CourseID)', { cap: 'Creating foreign key constraints on ALTER TABLE' }],
+        ['note', 'At column level the constraint sits inside the column’s definition, so it needs no column list. At table level it comes after the columns, so you name the column in brackets: `PRIMARY KEY (StudentID)`, `FOREIGN KEY (CourseID)`.', { label: 'Column level or table level?' }]
+      ],
+      quiz: [
+        { q: 'What happens when data breaks a constraint?', o: ['The action is aborted', 'The data is saved with a warning', 'The constraint is dropped', 'The table is deleted'], a: 0, why: 'If there is any violation, the action is aborted.' },
+        { q: 'A constraint declared as part of one column’s definition is defined at the…', o: ['column level', 'table level', 'database level', 'server level'], a: 0, why: 'Table-level constraints are declared separately and can cover several columns.' },
+        { q: 'Which is **not** one of the five constraint types in the handout?', o: ['INDEX', 'CHECK', 'DEFAULT', 'UNIQUE'], a: 0, why: 'The five are PRIMARY KEY, FOREIGN KEY, CHECK, DEFAULT and UNIQUE.' },
+        { q: 'Which line is a **table-level** primary key?', o: ['CONSTRAINT PK_Student PRIMARY KEY (StudentID)', 'StudentID INT CONSTRAINT PK_Student PRIMARY KEY', 'StudentID PRIMARY', 'PRIMARY StudentID KEY'], a: 0, why: 'At table level you name the column in brackets.' },
+        { q: 'Which statement adds a primary key to an existing Student table?', o: ['ALTER TABLE Student ADD CONSTRAINT PK_Student PRIMARY KEY (StudentID)', 'CREATE PRIMARY KEY ON Student', 'UPDATE Student SET PRIMARY KEY = StudentID', 'ALTER Student PRIMARY KEY'], a: 0, why: 'Use ALTER TABLE … ADD CONSTRAINT.' },
+        { q: 'In the LECTURER example, which table is the parent?', o: ['COURSE', 'LECTURER', 'Student', 'JOB'], a: 0, why: 'LECTURER.CourseID references COURSE (CourseID).' },
+        { q: 'Constraints can prevent the deletion of a table if there are dependencies.', o: ['True', 'False'], a: 0, why: 'The handout says this in its definition of constraints.' }
+      ]
+    },
+    {
+      id: 'l3s3', title: 'Unique, default and check constraints',
+      sub: 'Three more constraints, and how to list and drop the constraints on a table.',
+      blocks: [
+        RO,
+        ['h', 'Unique constraints'],
+        ['list', ['A UNIQUE constraint ensures no duplicate values are entered into specified columns that are not a table’s primary key.', 'It enforces uniqueness in a column or combination of columns. You can attach multiple unique constraints to a table, whereas you can attach only one primary key constraint to a table.']],
+        ['code', 'CREATE TABLE DEPARTMENT\n(\n  DeptNo NUMERIC NOT NULL,\n  DeptName VARCHAR(20)\n    CONSTRAINT UQ_DeptName UNIQUE\n)', { cap: 'Creating unique constraints on CREATE TABLE: column level. This creates a unique constraint on the DEPARTMENT table called UQ_DeptName. It consists of the column DeptName.' }],
+        ['code', 'CREATE TABLE DEPARTMENT\n(\n  DeptNo Numeric NOT NULL,\n  DeptName Varchar(20),\n  CONSTRAINT UQ_DeptName UNIQUE (DeptName)\n)', { cap: 'Creating unique constraints on CREATE TABLE: table level' }],
+        ['code', 'ALTER TABLE EMPLOYEE\nADD CONSTRAINT UQ_EmpName\nUNIQUE (LName, FName, MName)', { cap: 'Creating unique constraints on ALTER TABLE. This one covers a combination of three columns.' }],
+        ['h', 'Default constraints'],
+        ['p', 'A DEFAULT constraint enables you to define the value that will be supplied for a column whenever a user fails to enter a value.'],
+        ['code', 'CREATE TABLE SUBJECT\n(\n  SubjectID NUMERIC NOT NULL,\n  SubjectCode CHAR(10) NOT NULL,\n  SubjectDescription VARCHAR(50),\n  NoUnit NUMERIC NOT NULL DEFAULT 3\n)', { cap: 'Creating default constraints on CREATE TABLE. If the user fails to specify a value for the NoUnit column, it will have a value of 3.' }],
+        ['code', 'ALTER TABLE SUBJECT\nADD CONSTRAINT DF_Unit DEFAULT 3 FOR NoUnit', { cap: 'Creating default constraints on ALTER TABLE' }],
+        ['h', 'Check constraints'],
+        ['list', ['A CHECK constraint is used to enforce domain integrity by restricting the values allowed in a column to specific values.', 'A CHECK constraint contains a Boolean expression that causes the database to evaluate whether the value of an inserted or updated record matches the criteria of the CHECK constraint.', 'If the value is not within the allowed set of values, SQL Server will raise an error.']],
+        ['code', 'CREATE TABLE PRODUCT\n(\n  ProductID NUMERIC NOT NULL,\n  ProductDescription VARCHAR(50),\n  UnitPrice MONEY NOT NULL\n    CONSTRAINT CK_UnitPrice CHECK (UnitPrice > 0.00)\n)', { cap: 'Creating check constraints on CREATE TABLE. This creates a check constraint on the PRODUCT table called CK_UnitPrice. It enforces that the UnitPrice value is greater than 0.' }],
+        ['code', "ALTER TABLE EMPLOYEE\nADD CONSTRAINT CK_LastName\nCHECK (LastName IN ('Smith', 'Anderson', 'Jones'))", { cap: 'Creating check constraints on ALTER TABLE. This creates a check constraint on the existing EMPLOYEE table called CK_LastName. It ensures that the LastName column only contains the values Smith, Anderson, or Jones.' }],
+        ['p', 'The condition inside CHECK is written like a WHERE condition. You can try one on the practice data: the products below are the ones that would **break** `CHECK (UnitPrice > 0.00)` if it were added to Products.'],
+        ['demo', 'SELECT ProductName, UnitPrice\nFROM   Products\nWHERE  NOT (UnitPrice > 0.00)', { title: 'Which rows break the check?', after: 'No rows come back. Grandma’s Boysenberry Spread has a NULL price, and NOT (NULL > 0) is unknown, not TRUE. A CHECK constraint lets a row in unless its condition is FALSE, so a NULL passes. Only NOT NULL stops a NULL.' }],
+        ['h', 'Viewing a table’s constraints'],
+        ['p', 'To list the available constraints on a table, use the command `sp_helpconstraint`.'],
+        ['code', "sp_helpconstraint 'table_name'", { cap: 'Syntax. table_name is the table about which constraint information is returned. The table specified must be local to the current database.' }],
+        ['code', 'USE northwind\nsp_helpconstraint EMPLOYEE'],
+        T(['constraint_type', 'constraint_name', 'constraint_keys'], [['CHECK on column BirthDate', 'CK_Birthdate', '([BirthDate] < getdate())'], ['FOREIGN KEY', 'FK_Employees_Employees', 'ReportsTo REFERENCES Northwind.dbo.Employees (EmployeeID)'], ['PRIMARY KEY (clustered)', 'PK_Employees', 'EmployeeID']]),
+        ['h', 'Dropping a constraint'],
+        ['p', 'To drop or delete a constraint, alter the table and use the command DROP CONSTRAINT.'],
+        ['code', 'ALTER TABLE table_name\nDROP CONSTRAINT constraint_name', { cap: 'Syntax' }],
+        ['code', 'ALTER TABLE EMPLOYEE\nDROP CONSTRAINT CK_LastName', { cap: 'This drops the check constraint called CK_LastName on the EMPLOYEE table.' }],
+        ['note', 'A constraint cannot be modified or altered. Drop the constraint first, then recreate it.', { label: 'Note' }]
+      ],
+      quiz: [
+        { q: 'How many UNIQUE constraints can a table have?', o: ['More than one', 'Only one', 'None', 'Exactly one per primary key'], a: 0, why: 'You can attach multiple unique constraints, but only one primary key.' },
+        { q: 'Which constraint supplies a value whenever a user fails to enter one?', o: ['DEFAULT', 'CHECK', 'UNIQUE', 'FOREIGN KEY'], a: 0, why: 'DEFAULT 3 FOR NoUnit gives NoUnit the value 3.' },
+        { q: 'Which constraint enforces **domain** integrity by restricting a column to specific values?', o: ['CHECK', 'UNIQUE', 'PRIMARY KEY', 'FOREIGN KEY'], a: 0, why: 'CHECK holds a Boolean expression that values must meet.' },
+        { q: 'Which adds a default of 3 to NoUnit on an existing SUBJECT table?', o: ['ALTER TABLE SUBJECT ADD CONSTRAINT DF_Unit DEFAULT 3 FOR NoUnit', 'ALTER TABLE SUBJECT DEFAULT NoUnit = 3', 'UPDATE SUBJECT SET NoUnit = 3', 'ALTER TABLE SUBJECT ADD DEFAULT (NoUnit, 3)'], a: 0, why: 'DEFAULT value FOR column.' },
+        { q: 'Which command lists the constraints on a table?', o: ['sp_helpconstraint', 'sp_rename', 'sp_renamedb', 'SELECT CONSTRAINTS'], a: 0, why: 'sp_helpconstraint returns the type, name and keys of each constraint.' },
+        { q: 'How do you change an existing constraint?', o: ['Drop it, then recreate it', 'ALTER CONSTRAINT', 'MODIFY CONSTRAINT', 'sp_rename it'], a: 0, why: 'A constraint cannot be modified or altered.' },
+        { q: 'Which keeps UnitPrice above zero?', o: ['CHECK (UnitPrice > 0.00)', 'DEFAULT 0.00', 'UNIQUE (UnitPrice)', 'UnitPrice NOT NULL'], a: 0, why: 'A CHECK constraint tests every inserted or updated value.' }
+      ]
+    }
+  ],
+  review: {
+    intro: 'Practise Lesson 3. Below are the handout’s guide questions. Answer them in your notebook. Write the ALTER TABLE and CREATE TABLE statements for questions 4 and 5 and run them in SQL Server. This site’s database is read-only, so it cannot check them. Then take the lesson quiz.',
+    guide: [
+      'What do you call the table that contains the Primary Key in a Foreign Key Constraint?',
+      'Why are Foreign Keys important in a database?',
+      'What’s the difference between a primary key and a unique key?',
+      'Using the tables created in the guide questions of Lesson 2, alter the tables with the following constraints: a. Type must be one of Single, Double, or Family; b. Price must be between 1000 and 10000; c. RoomNo must be between 1 and 100; d. DateFrom and DateTo must be greater than today’s date; e. The same room cannot be double-booked; f. The same guest cannot have overlapping bookings.',
+      'Create the following tables: DIRECTOR (DirectorID, DirectorName, DirectorGender); MOVIE (MovieID, MovieTitle, YearReleased, DirectorID, Length, StudioName); REVIEWER (ReviewerID, ReviewerName); RATING (ReviewerID, MovieID, RatingDate, StarsRating). a. Artist_Name, Producer_Name, Film_Year, Part and Start should not be NULL; b. Movie Year must be after 1900; c. Rating stars must be from 1 to 5 only; d. Rating Date must be after 2000 and must not be greater than the current date; e. Director Gender must be M and F value only; f. The length cannot be less than 60 nor more than 250; g. The studio name can only be Disney, Fox, MGM, or Paramount; h. DirectorName and MovieTitle should be unique.'
+    ],
+    quiz: [
+      { q: 'Guide question 1. The table that contains the primary key in a foreign key constraint is the…', o: ['parent table (referenced table)', 'child table', 'dependent table', 'view'], a: 0, why: 'The child table holds the foreign key.' },
+      { q: 'Guide question 3. A key difference between a primary key and a unique key is…', o: ['a table can have only one primary key but several unique keys', 'a unique key can never be on more than one column', 'a primary key allows duplicates', 'there is no difference'], a: 0, why: 'Both stop duplicates. A primary key also never allows NULL.' },
+      { q: 'Guide question 4a. Which constraint makes Type one of Single, Double, or Family?', o: ["CHECK (Type IN ('Single', 'Double', 'Family'))", "DEFAULT 'Single'", 'UNIQUE (Type)', "CHECK (Type = 'Single' AND Type = 'Double')"], a: 0, why: 'IN lists the allowed values.' },
+      { q: 'Guide question 4b. Which constraint keeps Price between 1000 and 10000?', o: ['CHECK (Price BETWEEN 1000 AND 10000)', 'DEFAULT 1000', 'CHECK (Price > 10000)', 'UNIQUE (Price)'], a: 0, why: 'BETWEEN includes both ends.' },
+      { q: 'Guide question 4d. Which condition says DateFrom must be greater than today’s date?', o: ['CHECK (DateFrom > GETDATE())', 'CHECK (DateFrom < GETDATE())', 'DEFAULT GETDATE()', 'UNIQUE (DateFrom)'], a: 0, why: 'GETDATE() returns the current date and time.' },
+      { q: 'Guide question 5c. Which keeps StarsRating from 1 to 5 only?', o: ['CHECK (StarsRating BETWEEN 1 AND 5)', 'CHECK (StarsRating > 5)', 'DEFAULT 5', 'UNIQUE (StarsRating)'], a: 0, why: 'A CHECK with BETWEEN 1 AND 5.' },
+      { q: 'Guide question 5h. Which constraint makes MovieTitle unique?', o: ['UNIQUE (MovieTitle)', 'CHECK (MovieTitle IS NOT NULL)', 'DEFAULT MovieTitle', 'FOREIGN KEY (MovieTitle)'], a: 0, why: 'MOVIE already has MovieID as its primary key, so use UNIQUE.' },
+      { q: 'In RATING (ReviewerID, MovieID, …), MovieID should be a FOREIGN KEY that references…', o: ['MOVIE (MovieID)', 'REVIEWER (ReviewerID)', 'DIRECTOR (DirectorID)', 'RATING (MovieID)'], a: 0, why: 'Every rating must be for a movie that exists.' }
+    ]
+  }
+};
 
 /* ====================================================================== LESSON 4 */
 const L4 = {
@@ -622,4 +1175,4 @@ const L6 = {
   }
 };
 
-export const LESSONS = [L4, L5, L6];
+export const LESSONS = [L1, L2, L3, L4, L5, L6];

@@ -46,8 +46,11 @@ export function mountEditor(host, o, store) {
   const task = o.task, id = o.id;
   let fails = 0;
   // o.bare: used inside a quiz. The quiz shows the question itself, and there is no Watch button, like in an exam.
+  // The tables the model answer reads, with their columns, so the learner knows the exact names to type.
+  const used = task ? [...new Set([...task.a.matchAll(/\b(?:FROM|JOIN)\s+\[?(\w+)/gi)].map(m => m[1].toLowerCase()))].map(n => D.schema[n]).filter(Boolean) : [];
   host.innerHTML = `<div class="try">
     ${task && !o.bare ? `<p class="task"><b>Exercise.</b> ${rich(task.q)}</p>` : ''}
+    ${used.map(t => `<p class="ctx"><b>Use the ${esc(t.name)} table.</b> Its columns: ${t.cols.map(c => `<code title="${esc(c.type)}">${esc(c.name)}</code>`).join(' ')}</p>`).join('')}
     <label class="sr" for="ed-${id}">SQL query</label>
     <textarea id="ed-${id}" class="ed mono" rows="${Math.min(10, Math.max(3, (o.sql || '').split('\n').length + 1))}" spellcheck="false" autocomplete="off" autocapitalize="off" autocorrect="off" placeholder="${task ? 'Write your query here' : ''}">${esc(o.sql || '')}</textarea>
     <div class="bar"><button type="button" class="btn pri" data-a="run">${ic('play')} Run</button>

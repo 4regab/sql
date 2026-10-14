@@ -5,8 +5,8 @@ export const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 export const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const KW = new Set(('SELECT DISTINCT FROM WHERE GROUP BY ORDER HAVING AS AND OR NOT IN BETWEEN LIKE IS NULL ASC DESC TOP ALL ON JOIN INNER OUTER ' +
-  'UNION CASE WHEN THEN ELSE END').split(' '));
-const NOFN = new Set(['IN', 'AND', 'OR', 'NOT', 'BETWEEN', 'LIKE', 'AS', 'SELECT', 'FROM', 'WHERE', 'ON', 'BY', 'IS', 'TOP', 'DISTINCT', 'HAVING', 'ALL']);
+  'UNION CASE WHEN THEN ELSE END CREATE DATABASE USE TABLE ALTER ADD DROP COLUMN CONSTRAINT PRIMARY KEY FOREIGN REFERENCES UNIQUE CHECK DEFAULT IDENTITY FOR').split(' '));
+const NOFN = new Set(['IN', 'AND', 'OR', 'NOT', 'BETWEEN', 'LIKE', 'AS', 'SELECT', 'FROM', 'WHERE', 'ON', 'BY', 'IS', 'TOP', 'DISTINCT', 'HAVING', 'ALL', 'KEY', 'UNIQUE', 'CHECK', 'IDENTITY', 'TABLE', 'COLUMN']);
 const RE = /('(?:[^']|'')*'?)|(--[^\n]*)|(\[[^\]\n]*\]|"[^"\n]*")|(\b\d+\.?\d*\b)|\b([A-Za-z_]\w*)\b(\s*\()?|([\s\S])/g;
 
 /* SQL text to coloured HTML. */
